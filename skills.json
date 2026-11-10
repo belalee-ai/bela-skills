@@ -178,6 +178,21 @@
       "summary": "把用户主题展开为不同角度的视频选题。",
       "path": "bela-video-topics/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
+    },
+    {
+      "name": "bela-app-icon-picker",
+      "category": "动效与视觉",
+      "title": "App 图标提取",
+      "summary": "提取并整理应用图标，输出可用的透明 PNG。",
+      "path": "bela-app-icon-picker/SKILL.md"
+    },
+    {
+      "name": "bela-cart-savings-advisor",
+      "category": "日常实用工具",
+      "title": "购物车比价",
+      "summary": "从购物车截图整理优惠、拆单与预计到手价。",
+      "path": "bela-cart-savings-advisor/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-tools"
     }
   ]
 }

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bela App 图标提取"
+  short_description: "提取官方 App 图标并输出 1024px 透明圆角 PNG"
+  default_prompt: "Use $bela-app-icon-picker to collect and process the requested app icons."
+
+policy:
+  allow_implicit_invocation: true

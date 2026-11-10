@@ -1,6 +1,6 @@
 # Bela Skills
 
-李贝拉Bela 的 Agent Skill 合集。用来找选题、写口播、剪视频、做视觉、拆解参考视频，也收录读书、沟通和项目发布工具。
+李贝拉Bela 的 Agent Skill 合集。用来找选题、写口播、剪视频、做视觉、拆解参考视频，也收录读书、沟通、比价和项目发布工具。
 
 [![skills.sh](https://skills.sh/b/belalee-ai/bela-skills)](https://skills.sh/belalee-ai/bela-skills)
 
@@ -18,7 +18,7 @@ npx skills add belalee-ai/bela-skills
 npx skills add belalee-ai/bela-skills --skill bela-spoken-script -a codex
 ```
 
-Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-g`。安装后在对应 Agent 里说「用 bela-spoken-script，把这段体验整理成 45 秒能直接录的口播」。
+Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-g`。要先查看所有条目可加 `--list`。安装后在对应 Agent 里说「用 bela-spoken-script，把这段体验整理成 45 秒能直接录的口播」。
 
 ## 按任务找 Skill
 
@@ -43,6 +43,7 @@ Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-
 
 | Skill | 用途 |
 | --- | --- |
+| [App 图标提取 · `bela-app-icon-picker`](bela-app-icon-picker/SKILL.md) | 提取并整理应用图标，输出透明 PNG。 |
 | [文字动效库 · `bela-text-motion-library`](bela-text-motion-library/SKILL.md) | 挑选并复用标题、关键词和片头动效，附实现代码。 |
 | [章节进度条 · `bela-jindutiao`](bela-jindutiao/SKILL.md) | 为口播或教程设计章节导航，附可运行的进度逻辑和预览。 |
 | [动效导演 · `bela-motion-director`](bela-motion-director/SKILL.md) | 先为短视频或网页选动效机制，再做一段可验证的样片。 |
@@ -80,6 +81,12 @@ Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-
 | [职位日报 · `bela-daily-job-briefing`](bela-daily-job-briefing/SKILL.md) | 根据岗位、城市和行业整理有来源的职位更新。 |
 | [AI 日报 · `bela-daily-briefing`](bela-daily-briefing/SKILL.md) | 跟进 AI 新闻并整理成带来源的简报。 |
 
+### 日常实用工具
+
+| Skill | 用途 |
+| --- | --- |
+| [购物车比价 · `bela-cart-savings-advisor`](bela-cart-savings-advisor/SKILL.md) | 从购物车截图整理优惠、拆单与预计到手价。 |
+
 ## 怎么搭配用
 
 - 做一期小红书 AI 教程，从选题和口播开始，录完交给个人剪辑。标题、角色和章节导航按需要选用。
@@ -90,6 +97,8 @@ Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-
 
 旧仓库和版本入口见 [迁移清单](MIGRATION.md)。重叠能力合并到一个规范名称。公开版以用户提供的参考、项目文件和配置为输入。
 
+新增 Skill 时，目录名与 `SKILL.md` 文件头的 `name` 都使用 `bela-` 前缀，并同步更新首页分类与目录清单。
+
 [机器可读目录](skills.json) · [在 skills.sh 搜索 bela-skills](https://www.skills.sh/search?q=bela-skills)
 
 ## 示例
@@ -97,3 +106,5 @@ Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-
 下面是章节导航的静态预览。最终进度仍按实际口播校时。
 
 ![章节进度条示例](bela-jindutiao/assets/preview.png)
+
+[手绘漫画图库与示例](bela-hand-comic/docs/diagram-demos.md) · [手绘漫画功能与维护](bela-hand-comic/docs/maintenance.md)

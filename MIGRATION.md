@@ -8,7 +8,7 @@
 | [bela-hand-comic](https://github.com/belalee-ai/bela-hand-comic) | [`bela-hand-comic`](bela-hand-comic/SKILL.md) |
 | [bela-videoframe-art](https://github.com/belalee-ai/bela-videoframe-art) | [`bela-videoframe-art`](bela-videoframe-art/SKILL.md) |
 | [bela-One-page-book](https://github.com/belalee-ai/bela-One-page-book) | [`bela-one-page-book`](bela-one-page-book/SKILL.md) |
-| [bela-tools](https://github.com/belalee-ai/bela-tools) | [`bela-github-publish`](bela-github-publish/SKILL.md)、[`bela-skill-hygiene`](bela-skill-hygiene/SKILL.md) |
+| [bela-tools](https://github.com/belalee-ai/bela-tools) | [`bela-github-publish`](bela-github-publish/SKILL.md)、[`bela-skill-hygiene`](bela-skill-hygiene/SKILL.md)、[`bela-cart-savings-advisor`](bela-cart-savings-advisor/SKILL.md) |
 | [skill-hygiene](https://github.com/belalee-ai/skill-hygiene) | [`bela-skill-hygiene`](bela-skill-hygiene/SKILL.md) |
 | [daily-job-briefing](https://github.com/belalee-ai/daily-job-briefing) | [`bela-daily-job-briefing`](bela-daily-job-briefing/SKILL.md) |
 | [bela-content-creator](https://github.com/belalee-ai/bela-content-creator) | [`bela-daily-briefing`](bela-daily-briefing/SKILL.md)、[`bela-content-planner`](bela-content-planner/SKILL.md)、[`bela-video-topics`](bela-video-topics/SKILL.md)、[`bela-topic-picker`](bela-topic-picker/SKILL.md)、[`bela-daily-job-briefing`](bela-daily-job-briefing/SKILL.md) |
