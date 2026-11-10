@@ -1,0 +1,4 @@
+interface:
+  display_name: "贝拉 · 视频号下载拆解归档"
+  short_description: "下载视频号、按时间轴拆解，并归档到可配置的飞书知识库目录"
+  default_prompt: "使用 $bela-wechat-video-download-copy-to-lark 下载、拆解并归档这条视频号链接："

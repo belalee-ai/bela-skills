@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bela 小红书竞品分析"
+  short_description: "读取真实笔记、评论和主页后做证据化拆解"
+  default_prompt: "Use $bela-xhs-analysis to retrieve the real Xiaohongshu content first, state the evidence coverage, and then analyze this note or creator."

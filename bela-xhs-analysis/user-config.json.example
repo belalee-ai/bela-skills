@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "storage_root": "~/Documents/xhs-竞品分析",
+  "persona_root": "~/Documents/个人档案",
+  "default_industry": null,
+  "explosive_threshold_low": 1000,
+  "explosive_threshold_high": 5000,
+  "fans_threshold": 2000,
+  "archive_after_days": 180,
+  "scan_depth_default": "standard",
+  "ask_on_each_scan": true
+}

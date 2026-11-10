@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bela VideoFrame Art"
+  short_description: "展示13种风格及建筑、风景、人像适配，再选帧生成"
+  default_prompt: "用 $bela-videoframe-art 展示13种风格及建筑、风景、人像适配；我可以直接选择，也可以让 AI 根据视频或图片推荐。"

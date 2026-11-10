@@ -1,0 +1,183 @@
+{
+  "name": "bela-skills",
+  "repository": "belalee-ai/bela-skills",
+  "skills": [
+    {
+      "name": "bela-video-editing",
+      "category": "视频制作",
+      "title": "个人剪辑",
+      "summary": "从现有口播、录屏或剪辑工程接续，交付粗剪、字幕、动效或验收。",
+      "path": "bela-video-editing/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-spoken-script",
+      "category": "选题与口播",
+      "title": "口播稿",
+      "summary": "把选题或参考稿改成可以直接录的口播。",
+      "path": "bela-spoken-script/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-ai-news-video",
+      "category": "选题与口播",
+      "title": "AI 新闻视频",
+      "summary": "核实热点事实，整理口播、真实素材和分镜。",
+      "path": "bela-ai-news-video/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-text-motion-library",
+      "category": "动效与视觉",
+      "title": "文字动效库",
+      "summary": "挑选并复用标题、关键词和片头动效，附实现代码。",
+      "path": "bela-text-motion-library/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-jindutiao",
+      "category": "动效与视觉",
+      "title": "章节进度条",
+      "summary": "为口播或教程设计章节导航，附可运行的进度逻辑和预览。",
+      "path": "bela-jindutiao/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-motion-director",
+      "category": "动效与视觉",
+      "title": "动效导演",
+      "summary": "先为短视频或网页选动效机制，再做一段可验证的样片。",
+      "path": "bela-motion-director/SKILL.md"
+    },
+    {
+      "name": "bela-ip-pic",
+      "category": "动效与视觉",
+      "title": "贝拉小人物 IP",
+      "summary": "用贝拉原创小人物或自己的角色参考做一致的手绘视觉。",
+      "path": "bela-ip-pic/SKILL.md"
+    },
+    {
+      "name": "bela-broll",
+      "category": "视频制作",
+      "title": "B-roll 配画",
+      "summary": "按口播节点设计补充画面，确定风格、人物连续性和实现路线。",
+      "path": "bela-broll/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-ai-xhs-cover-director",
+      "category": "动效与视觉",
+      "title": "小红书封面",
+      "summary": "根据内容类型和证据设计封面，保留小尺寸阅读焦点。",
+      "path": "bela-ai-xhs-cover-director/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
+    },
+    {
+      "name": "bela-topic-picker",
+      "category": "选题与口播",
+      "title": "小红书选题",
+      "summary": "根据账号方向和真实使用证据排序可拍选题。",
+      "path": "bela-topic-picker/SKILL.md"
+    },
+    {
+      "name": "bela-wechat-video-download-copy-to-lark",
+      "category": "拆解与归档",
+      "title": "视频号拆解归档",
+      "summary": "按时间轴拆视频号链接，按用户配置归档到飞书。",
+      "path": "bela-wechat-video-download-copy-to-lark/SKILL.md"
+    },
+    {
+      "name": "bela-channels-remake",
+      "category": "拆解与归档",
+      "title": "视频号口播复刻",
+      "summary": "沿用参考视频的结构和节奏，重写自己的口播和镜头表。",
+      "path": "bela-channels-remake/SKILL.md"
+    },
+    {
+      "name": "bela-xhs-analysis",
+      "category": "拆解与归档",
+      "title": "小红书笔记拆解",
+      "summary": "读取并分析单篇小红书笔记，提炼内容结构。",
+      "path": "bela-xhs-analysis/SKILL.md"
+    },
+    {
+      "name": "bela-tactful-replies",
+      "category": "阅读与沟通",
+      "title": "高情商回复",
+      "summary": "按关系、目的和场合提供可直接说出口的回复。",
+      "path": "bela-tactful-replies/SKILL.md"
+    },
+    {
+      "name": "bela-hand-comic",
+      "category": "动效与视觉",
+      "title": "手绘漫画",
+      "summary": "把概念、故事和关系画成好懂的手绘漫画。",
+      "path": "bela-hand-comic/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-hand-comic"
+    },
+    {
+      "name": "bela-videoframe-art",
+      "category": "动效与视觉",
+      "title": "视频帧艺术化",
+      "summary": "从指定视频抽帧，选定参考帧和风格后生成艺术图。",
+      "path": "bela-videoframe-art/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-videoframe-art"
+    },
+    {
+      "name": "bela-one-page-book",
+      "category": "阅读与沟通",
+      "title": "一页读书",
+      "summary": "根据原书生成梗概、脑图和可回溯到出处的阅读路线。",
+      "path": "bela-one-page-book/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-One-page-book"
+    },
+    {
+      "name": "bela-github-publish",
+      "category": "开发与发布",
+      "title": "GitHub 发布",
+      "summary": "为 Skill、应用或工具准备 README、真实截图和安装说明。",
+      "path": "bela-github-publish/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-tools"
+    },
+    {
+      "name": "bela-skill-hygiene",
+      "category": "开发与发布",
+      "title": "Skill 体检",
+      "summary": "检查重复、膨胀和路由冲突，给出清理方案。",
+      "path": "bela-skill-hygiene/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/skill-hygiene"
+    },
+    {
+      "name": "bela-daily-job-briefing",
+      "category": "信息简报",
+      "title": "职位日报",
+      "summary": "根据岗位、城市和行业整理有来源的职位更新。",
+      "path": "bela-daily-job-briefing/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/daily-job-briefing"
+    },
+    {
+      "name": "bela-daily-briefing",
+      "category": "信息简报",
+      "title": "AI 日报",
+      "summary": "跟进 AI 新闻并整理成带来源的简报。",
+      "path": "bela-daily-briefing/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
+    },
+    {
+      "name": "bela-content-planner",
+      "category": "选题与口播",
+      "title": "内容规划",
+      "summary": "根据创作方向和发布节奏整理阶段计划。",
+      "path": "bela-content-planner/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
+    },
+    {
+      "name": "bela-video-topics",
+      "category": "选题与口播",
+      "title": "视频选题草案",
+      "summary": "把用户主题展开为不同角度的视频选题。",
+      "path": "bela-video-topics/SKILL.md",
+      "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
+    }
+  ]
+}

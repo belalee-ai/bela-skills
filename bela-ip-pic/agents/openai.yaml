@@ -1,0 +1,5 @@
+interface:
+  display_name: "贝拉小人物 IP"
+  short_description: "生成和编辑稳定一致、可持续出镜的贝拉小人物手绘视觉"
+  brand_color: "#9B3346"
+  default_prompt: "Use $bela-ip-pic to create an original visual with my consistent Bela character IP."

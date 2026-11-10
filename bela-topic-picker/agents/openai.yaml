@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bela AI 选题助手"
+  short_description: "从真实问题和当前证据中筛出 3-5 个优先选题"
+  default_prompt: "Use $bela-topic-picker to rank 3-5 evidence-backed Xiaohongshu topics for Bela's current AI account, without drafting full scripts yet."

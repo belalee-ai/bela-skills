@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bela 动效导演"
+  short_description: "先选动效方向，再制作一个可验证 demo"
+  default_prompt: "Use $bela-motion-director to recommend a small motion-effect menu and build only one verified demo after selection."

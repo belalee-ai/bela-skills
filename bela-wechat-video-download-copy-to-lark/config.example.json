@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "destination": {
+    "space_name": "贝拉自媒体秘密基地",
+    "node_title": "视频拆解",
+    "node_path": null,
+    "parent_wiki_url": null
+  },
+  "transcription": {
+    "mode": "whisper-local",
+    "language": "zh",
+    "model": "small",
+    "model_path": null,
+    "runtime_profile": null,
+    "endpoint": null,
+    "threads": 4
+  },
+  "tools": {
+    "hypit": null,
+    "whisper": null
+  },
+  "skill_roots": [],
+  "skill_sources": {}
+}

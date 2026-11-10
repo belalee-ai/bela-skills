@@ -1,0 +1,4 @@
+interface:
+  display_name: "高情商回复"
+  short_description: "从20类524题固定库选取有分寸的三条回复，支持自然、轻松或克制口吻"
+  default_prompt: "用 $tactful-replies 从当前固定库选一个匹配的情境，给我三条有分寸的现成回复。"
