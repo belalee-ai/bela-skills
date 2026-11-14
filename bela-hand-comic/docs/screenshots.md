@@ -6,7 +6,7 @@
 
 2026-09-21，截图取自 GitHub 提交 `5372c4a` 的 README 图库区域。简约知识卡与墨线、蜡笔、剪纸、黑白漫画、水彩示例集中展示，六张原图均已检查完整加载。下方历史截图保留各自日期与版本。
 
-![GitHub 统一图库区域的实际截图](images/github-unified-gallery.png)
+![GitHub 统一图库区域的实际截图](images/github-unified-gallery.webp)
 
 [查看原图、选型说明和提示词](diagram-demos.md)
 
@@ -52,25 +52,25 @@
 
 ### 默认效果与可自定义说明
 
-![GitHub README 实际截图：手绘效果和自定义说明](images/github-readme.png)
+![GitHub README 实际截图：手绘效果和自定义说明](images/github-readme.webp)
 
 ### 安装与第一次使用
 
-![GitHub README 实际截图：可复制安装口令和首次使用](images/github-install.png)
+![GitHub README 实际截图：可复制安装口令和首次使用](images/github-install.webp)
 
 ### 自定义与环境要求
 
-![GitHub README 实际截图：人物、风格、排版与环境要求](images/github-customize.png)
+![GitHub README 实际截图：人物、风格、排版与环境要求](images/github-customize.webp)
 
 ### Agent 兼容说明
 
-![GitHub README 实际截图：六种 Agent 的安装支持和出图条件](images/github-agents.png)
+![GitHub README 实际截图：六种 Agent 的安装支持和出图条件](images/github-agents.webp)
 
 安装支持、项目级文件验证与客户端完整出图分别说明；Claude Code、Codex 等工具名直接放在首页。
 
 ### 从材料到角色设计
 
-![GitHub 使用指南实际截图：角色设计材料与五项最小信息](images/github-character-design.png)
+![GitHub 使用指南实际截图：角色设计材料与五项最小信息](images/github-character-design.webp)
 
 拍摄于 2026-09-21，来自 `docs/character-design.md`（提交 `c5b1201`），视口 1440×1080。展示照片、角色图、纯文字和风格参考分别需要提供什么；完整可填写模板见 [角色设计指南](character-design.md)。
 
@@ -82,10 +82,10 @@
 
 2026-09-21，在 GitHub 实际打开提交 `8e2eca5` 的 README，核对两张新图均加载为 1672×941 原图。截图记录流程图与下方对比表的开头，完整图片见 Demo 页。
 
-![GitHub 首页新增贝拉图示 Demo 的实际页面截图](images/github-diagram-demos.png)
+![GitHub 首页新增贝拉图示 Demo 的实际页面截图](images/github-diagram-demos.webp)
 
 ### 三种类型扩展实拍
 
 2026-09-21，GitHub 提交 `d0f06f3` 的 README，新增剪纸结构图、黑白时间线、水彩手账三种类型。浏览器核对三张图片均完整加载；下图是实际页面截图，原图及提示词见 [图库](diagram-demos.md)。
 
-![GitHub README 中三种新增类型的实际展示截图](images/github-more-styles.png)
+![GitHub README 中三种新增类型的实际展示截图](images/github-more-styles.webp)

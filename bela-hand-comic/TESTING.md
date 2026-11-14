@@ -62,7 +62,7 @@ npx skills add belalee-ai/bela-skills --skill bela-hand-comic \
 
 以上图片均为 1672×941 PNG，逐张目视检查；贝拉身份参考被用于新场景，Demo 不替代角色设定原图。新图提示词已随仓库保留，Skill 格式和受影响的本地链接已检查。这里记录的是在 Codex 中读取 Skill 后调用图片工具的结果，并非六种客户端的自动触发测试。真实数据绘图规则已补充，但本次两张 Demo 为定性图，没有实测精确数值绘图分支。
 
-公开页面回读：提交 `8e2eca5` 已推送，GitHub README 中两张新图加载完整（原图均为 1672×941），已保存并目视检查 [新版页面截图](docs/images/github-diagram-demos.png)。
+公开页面回读：提交 `8e2eca5` 已推送，GitHub README 中两张新图加载完整（原图均为 1672×941），已保存并目视检查 [新版页面截图](docs/images/github-diagram-demos.webp)。
 
 ## 2026-09-21 简约知识卡片规则更新
 
@@ -78,7 +78,7 @@ npx skills add belalee-ai/bela-skills --skill bela-hand-comic \
 
 三张最终图片已目视检查。结构图与时间线均为 1672×941，水彩场景为 1448×1086。完整生成与修正提示词见 [本轮提示词](docs/more-style-prompts.md)。仍未进行跨 Agent 客户端的完整生成实测。
 
-三种类型的公开页面已回读：提交 `d0f06f3` 的 README 中三张新图均加载完整，原图尺寸与本地一致；已检查并保存 [实际页面截图](docs/images/github-more-styles.png)。
+三种类型的公开页面已回读：提交 `d0f06f3` 的 README 中三张新图均加载完整，原图尺寸与本地一致；已检查并保存 [实际页面截图](docs/images/github-more-styles.webp)。
 
 ## 简约知识卡与图库统一整理
 
@@ -88,4 +88,4 @@ npx skills add belalee-ai/bela-skills --skill bela-hand-comic \
 
 本机与公开版 `references/simple-knowledge-card.md` 内容一致；本次在公开版 SKILL 入口补上统一选图顺序与图库链接，未覆盖本机个人配置。Skill 格式与 Markdown 本地资源链接检查通过；安装和跨客户端出图测试沿用此前明确范围。
 
-统一图库公开页已回读：`5372c4a` 的 README 六张图片全部完整加载，尺寸与本地一致；实际图库区域已截图并目视检查，见 [统一图库截图](docs/images/github-unified-gallery.png)。
+统一图库公开页已回读：`5372c4a` 的 README 六张图片全部完整加载，尺寸与本地一致；实际图库区域已截图并目视检查，见 [统一图库截图](docs/images/github-unified-gallery.webp)。

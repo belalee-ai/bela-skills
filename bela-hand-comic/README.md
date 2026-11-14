@@ -26,16 +26,16 @@
 
 <table>
 <tr>
-<td width="50%"><a href="docs/images/demo-simple-knowledge-card.png"><img src="docs/images/demo-simple-knowledge-card.png" alt="简约知识卡：Jev 在应用中的位置"><br><b>简约知识卡 · 应用结构示意</b></a><br>先看关系，淡背景与小人物辅助阅读。</td>
-<td width="50%"><a href="docs/images/demo-flowchart.png"><img src="docs/images/demo-flowchart.png" alt="白底墨线：贝拉检查角色试样的流程图"><br><b>白底墨线 · 流程图</b></a><br>说明步骤、判断和返工。</td>
+<td width="50%"><a href="docs/images/demo-simple-knowledge-card.webp"><img src="docs/images/demo-simple-knowledge-card.webp" alt="简约知识卡：Jev 在应用中的位置"><br><b>简约知识卡 · 应用结构示意</b></a><br>先看关系，淡背景与小人物辅助阅读。</td>
+<td width="50%"><a href="docs/images/demo-flowchart.webp"><img src="docs/images/demo-flowchart.webp" alt="白底墨线：贝拉检查角色试样的流程图"><br><b>白底墨线 · 流程图</b></a><br>说明步骤、判断和返工。</td>
 </tr>
 <tr>
-<td width="50%"><a href="docs/images/demo-comparison.png"><img src="docs/images/demo-comparison.png" alt="粗蜡笔：三种角色设计起步方式对比"><br><b>粗蜡笔 · 对比表</b></a><br>用统一维度比较资料要求。</td>
-<td width="50%"><a href="docs/images/demo-collage-structure.png"><img src="docs/images/demo-collage-structure.png" alt="剪纸拼贴：角色设定的三个部分"><br><b>剪纸拼贴 · 结构图</b></a><br>用纸片分组表现组成关系。</td>
+<td width="50%"><a href="docs/images/demo-comparison.webp"><img src="docs/images/demo-comparison.webp" alt="粗蜡笔：三种角色设计起步方式对比"><br><b>粗蜡笔 · 对比表</b></a><br>用统一维度比较资料要求。</td>
+<td width="50%"><a href="docs/images/demo-collage-structure.webp"><img src="docs/images/demo-collage-structure.webp" alt="剪纸拼贴：角色设定的三个部分"><br><b>剪纸拼贴 · 结构图</b></a><br>用纸片分组表现组成关系。</td>
 </tr>
 <tr>
-<td width="50%"><a href="docs/images/demo-ink-timeline.png"><img src="docs/images/demo-ink-timeline.png" alt="黑白漫画：创作日程时间线"><br><b>黑白漫画 · 时间线</b></a><br>串联阶段，青柠手环点色。</td>
-<td width="50%"><a href="docs/images/demo-watercolor-journal.png"><img src="docs/images/demo-watercolor-journal.png" alt="水彩手账：贝拉在公园画画"><br><b>水彩手账 · 生活场景</b></a><br>用环境与动作表达观察和情绪。</td>
+<td width="50%"><a href="docs/images/demo-ink-timeline.webp"><img src="docs/images/demo-ink-timeline.webp" alt="黑白漫画：创作日程时间线"><br><b>黑白漫画 · 时间线</b></a><br>串联阶段，青柠手环点色。</td>
+<td width="50%"><a href="docs/images/demo-watercolor-journal.webp"><img src="docs/images/demo-watercolor-journal.webp" alt="水彩手账：贝拉在公园画画"><br><b>水彩手账 · 生活场景</b></a><br>用环境与动作表达观察和情绪。</td>
 </tr>
 </table>
 
