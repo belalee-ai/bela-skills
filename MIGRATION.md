@@ -14,3 +14,5 @@
 | [bela-content-creator](https://github.com/belalee-ai/bela-content-creator) | [`bela-daily-briefing`](bela-daily-briefing/SKILL.md)、[`bela-content-planner`](bela-content-planner/SKILL.md)、[`bela-video-topics`](bela-video-topics/SKILL.md)、[`bela-topic-picker`](bela-topic-picker/SKILL.md)、[`bela-daily-job-briefing`](bela-daily-job-briefing/SKILL.md) |
 
 本地旧名 `lidali-ai-content-editing` 对应公开版 `bela-video-editing`，`belalee-broll` 对应 `bela-broll`，`tactful-replies` 对应 `bela-tactful-replies`。
+
+本地旧名 `ameng-tiny-png` 对应 [`bela-tiny-png`](bela-tiny-png/SKILL.md)。

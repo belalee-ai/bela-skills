@@ -193,6 +193,13 @@
       "summary": "从购物车截图整理优惠、拆单与预计到手价。",
       "path": "bela-cart-savings-advisor/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-tools"
+    },
+    {
+      "name": "bela-tiny-png",
+      "category": "日常实用工具",
+      "title": "图片压缩",
+      "summary": "用 TinyPNG API 批量压缩、缩放及转换图片格式。",
+      "path": "bela-tiny-png/SKILL.md"
     }
   ]
 }

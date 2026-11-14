@@ -86,6 +86,7 @@ Claude Code 把 `-a codex` 换成 `-a claude-code`；需要全局安装时加 `-
 | Skill | 用途 |
 | --- | --- |
 | [购物车比价 · `bela-cart-savings-advisor`](bela-cart-savings-advisor/SKILL.md) | 从购物车截图整理优惠、拆单与预计到手价。 |
+| [图片压缩 · `bela-tiny-png`](bela-tiny-png/SKILL.md) | 用 TinyPNG API 批量压缩、缩放及转换图片格式。 |
 
 ## 怎么搭配用
 
