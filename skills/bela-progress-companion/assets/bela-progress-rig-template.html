@@ -1,0 +1,428 @@
+<template id="bela-seated-progress-cursor-template">
+  <style>
+    @font-face {
+      font-family: "Bela Progress UI";
+      src: local("PingFang SC Semibold"), local("PingFang SC");
+      font-style: normal;
+      font-weight: 600;
+      font-display: block;
+    }
+
+    :root {
+      --demo-bg: #000000;
+      --demo-track: #ffffff;
+      --demo-pink: #ffaac1;
+      --demo-dot: #f2a0be;
+    }
+
+    * { box-sizing: border-box; }
+
+    #bela-seated-progress-cursor {
+      position: relative;
+      width: 864px;
+      height: 1824px;
+      overflow: hidden;
+      background: var(--demo-bg);
+      color: var(--demo-pink);
+      font-family: "Bela Progress UI";
+    }
+
+    #progress-overlay {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .chapter-labels {
+      position: absolute;
+      top: 214px;
+      left: 0;
+      width: 864px;
+      height: 76px;
+      display: grid;
+      grid-template-columns: 184px 306px 190px 184px;
+      align-items: center;
+      font-size: 36px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    .chapter-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 76px;
+    }
+
+    .chapter-label:first-child {
+      justify-content: flex-start;
+      padding-left: 36px;
+    }
+
+    .chapter-divider {
+      position: absolute;
+      top: 216px;
+      width: 3px;
+      height: 69px;
+      border-radius: 2px;
+      background: var(--demo-pink);
+      z-index: 2;
+    }
+
+    #divider-1 { left: 184px; }
+    #divider-2 { left: 490px; }
+    #divider-3 { left: 680px; }
+
+    .progress-track,
+    .progress-complete {
+      position: absolute;
+      left: 0;
+      top: 337px;
+      width: 864px;
+      height: 6px;
+      transform-origin: left center;
+    }
+
+    .progress-track { background: var(--demo-track); z-index: 1; }
+    .progress-complete { background: var(--demo-pink); z-index: 3; will-change: transform; }
+
+    #ride-root {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1px;
+      height: 1px;
+      z-index: 5;
+      will-change: transform;
+    }
+
+    #dot-only {
+      position: absolute;
+      left: -38.5px;
+      top: 301.5px;
+      width: 77px;
+      height: 77px;
+      border-radius: 50%;
+      background: var(--demo-dot);
+    }
+
+    #character-shell {
+      position: absolute;
+      left: -67.425px;
+      top: 147.8px;
+      width: 133.765px;
+      height: 282.565px;
+      transform: scale(0.82);
+      transform-origin: 67.425px 192.2px;
+    }
+
+    #character-rig {
+      display: block;
+      width: 133.765px;
+      height: 282.565px;
+      overflow: visible;
+    }
+
+    #character-inertia-wrapper,
+    #torso-output-wrapper,
+    #head-output-wrapper,
+    #legs-common-inertia,
+    #leg-viewer-left,
+    #leg-viewer-right,
+    #arm-green-viewer-left,
+    #arm-viewer-right {
+      will-change: transform;
+    }
+  </style>
+
+  <div
+    id="bela-seated-progress-cursor"
+    data-composition-id="bela-seated-progress-cursor"
+    data-start="0"
+    data-duration="5"
+    data-fps="30"
+    data-width="864"
+    data-height="1824"
+  >
+    <div id="progress-overlay" class="clip" data-start="0" data-duration="5" data-track-index="1">
+      <div class="chapter-labels" aria-label="章节进度">
+        <div class="chapter-label">开篇</div>
+        <div class="chapter-label">人生Skill是什么</div>
+        <div class="chapter-label">8个角色</div>
+        <div class="chapter-label">我的案例</div>
+      </div>
+
+      <div id="divider-1" class="chapter-divider"></div>
+      <div id="divider-2" class="chapter-divider"></div>
+      <div id="divider-3" class="chapter-divider"></div>
+      <div class="progress-track"></div>
+      <div id="progress-complete" class="progress-complete"></div>
+
+      <div id="ride-root" data-layout-allow-overflow="true">
+        <div id="dot-only" aria-hidden="true"></div>
+        <div id="character-shell">
+          <svg
+            id="character-rig"
+            viewBox="0 0 863 1823"
+            role="img"
+            aria-label="贝拉坐在载着她前进的粉色进度点上"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <defs>
+              <!-- Joint masks overlap inward by at least 12 source px. -->
+              <path id="head-shape" d="M425 128 C548 128 637 228 642 377 C647 494 596 578 520 624 L503 693 L360 693 L344 632 C218 619 132 536 127 389 C121 236 250 132 425 128 Z" />
+              <path id="leg-viewer-left-shape" d="M310 820 C378 805 469 829 520 890 C544 924 543 969 513 1000 C493 1020 487 1042 490 1080 L497 1271 C518 1295 533 1337 534 1395 C535 1468 488 1518 419 1525 C356 1529 318 1489 316 1430 C313 1377 329 1338 353 1307 C363 1287 359 1264 355 1241 L336 1082 C329 1026 299 993 294 945 C288 885 291 840 310 820 Z" />
+              <path id="leg-viewer-right-shape" d="M507 824 C596 813 681 839 716 909 C743 964 720 1013 684 1041 L693 1273 C740 1295 797 1320 816 1373 C837 1437 790 1487 724 1489 C665 1487 613 1450 591 1401 C575 1365 600 1316 630 1275 L596 1085 C577 1034 531 1016 504 972 C479 930 479 856 507 824 Z" />
+              <path id="torso-core-shape" d="M303 574 C345 551 502 551 555 602 C581 669 593 786 585 874 L620 965 C602 1035 549 1092 437 1117 C349 1102 298 1049 283 975 L302 822 Z" />
+              <path id="support-arm-shape" d="M302 570 C350 558 389 588 387 635 C385 685 358 755 344 824 C332 884 320 941 307 997 L289 1068 C276 1111 224 1152 178 1134 C134 1117 122 1065 145 1028 C171 990 187 959 194 924 L235 687 C245 625 268 587 302 570 Z" />
+              <path id="viewer-right-arm-shape" d="M490 570 C536 556 582 582 600 629 C617 676 626 758 649 856 C665 912 724 950 777 979 C819 1002 823 1051 791 1082 C756 1116 700 1092 669 1058 L611 996 L555 903 C529 834 506 727 482 635 C473 605 475 583 490 570 Z" />
+              <path id="support-arm-cutout-shape" d="M238 677 C272 661 326 659 357 680 C355 718 349 775 340 826 C328 886 316 943 303 999 L285 1068 C272 1107 224 1147 181 1130 C142 1114 132 1067 153 1032 C179 994 194 961 201 925 Z" />
+              <path id="viewer-right-arm-cutout-shape" d="M505 676 C540 660 588 665 610 691 C620 740 630 799 649 858 C666 915 726 953 777 981 C815 1002 818 1047 788 1076 C755 1107 706 1087 675 1054 L618 991 L563 898 C545 843 526 758 505 676 Z" />
+              <path id="shorts-bridge-shape" d="M284 830 C348 807 602 811 674 864 L704 998 C646 1052 579 1093 435 1119 C333 1103 270 1046 260 978 Z" />
+
+              <clipPath id="clip-head" clipPathUnits="userSpaceOnUse">
+                <use href="#head-shape" xlink:href="#head-shape" />
+              </clipPath>
+              <mask id="mask-torso-with-arms-removed" maskUnits="userSpaceOnUse" x="0" y="0" width="863" height="1823">
+                <rect width="863" height="1823" fill="black" />
+                <use href="#torso-core-shape" xlink:href="#torso-core-shape" fill="white" />
+                <use href="#shorts-bridge-shape" xlink:href="#shorts-bridge-shape" fill="white" />
+                <use href="#support-arm-shape" xlink:href="#support-arm-shape" fill="black" />
+                <use href="#viewer-right-arm-shape" xlink:href="#viewer-right-arm-shape" fill="black" />
+              </mask>
+              <clipPath id="clip-support-arm" clipPathUnits="userSpaceOnUse">
+                <use href="#support-arm-shape" xlink:href="#support-arm-shape" />
+              </clipPath>
+              <clipPath id="clip-viewer-right-arm" clipPathUnits="userSpaceOnUse">
+                <use href="#viewer-right-arm-shape" xlink:href="#viewer-right-arm-shape" />
+              </clipPath>
+              <clipPath id="clip-leg-viewer-left" clipPathUnits="userSpaceOnUse">
+                <use href="#leg-viewer-left-shape" xlink:href="#leg-viewer-left-shape" />
+              </clipPath>
+              <clipPath id="clip-leg-viewer-right" clipPathUnits="userSpaceOnUse">
+                <use href="#leg-viewer-right-shape" xlink:href="#leg-viewer-right-shape" />
+              </clipPath>
+              <mask id="mask-leg-viewer-left-with-arm-removed" maskUnits="userSpaceOnUse" x="0" y="0" width="863" height="1823">
+                <rect width="863" height="1823" fill="black" />
+                <use href="#leg-viewer-left-shape" xlink:href="#leg-viewer-left-shape" fill="white" />
+                <use href="#support-arm-shape" xlink:href="#support-arm-shape" fill="black" />
+              </mask>
+              <mask id="mask-leg-viewer-right-with-arm-removed" maskUnits="userSpaceOnUse" x="0" y="0" width="863" height="1823">
+                <rect width="863" height="1823" fill="black" />
+                <use href="#leg-viewer-right-shape" xlink:href="#leg-viewer-right-shape" fill="white" />
+                <use href="#viewer-right-arm-shape" xlink:href="#viewer-right-arm-shape" fill="black" />
+              </mask>
+              <clipPath id="clip-collar-seam" clipPathUnits="userSpaceOnUse">
+                <path d="M322 620 L540 616 L568 718 L300 721 Z" />
+              </clipPath>
+              <mask id="mask-hip-seam-with-arms-removed" maskUnits="userSpaceOnUse" x="0" y="0" width="863" height="1823">
+                <rect width="863" height="1823" fill="black" />
+                <path d="M284 828 L682 828 L688 1015 L278 1034 Z" fill="white" />
+                <use href="#support-arm-shape" xlink:href="#support-arm-shape" fill="black" />
+                <use href="#viewer-right-arm-shape" xlink:href="#viewer-right-arm-shape" fill="black" />
+              </mask>
+              <clipPath id="clip-green-shoulder-seam" clipPathUnits="userSpaceOnUse">
+                <circle cx="340" cy="650" r="35" />
+              </clipPath>
+              <clipPath id="clip-right-shoulder-seam" clipPathUnits="userSpaceOnUse">
+                <circle cx="535" cy="650" r="35" />
+              </clipPath>
+              <clipPath id="clip-green-lower-shoulder-seam" clipPathUnits="userSpaceOnUse">
+                <circle cx="340" cy="680" r="34" />
+              </clipPath>
+              <clipPath id="clip-right-lower-shoulder-seam" clipPathUnits="userSpaceOnUse">
+                <circle cx="535" cy="680" r="34" />
+              </clipPath>
+              <clipPath id="clip-green-side-texture-seam" clipPathUnits="userSpaceOnUse">
+                <path d="M294 632 L366 620 L354 884 L286 1000 Z" />
+              </clipPath>
+              <clipPath id="clip-right-side-texture-seam" clipPathUnits="userSpaceOnUse">
+                <path d="M500 620 L568 632 L646 1000 L550 892 Z" />
+              </clipPath>
+            </defs>
+
+            <g id="character-inertia-wrapper">
+              <g id="legs-common-inertia">
+                <g id="leg-viewer-left" mask="url(#mask-leg-viewer-left-with-arm-removed)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+                <g id="leg-viewer-right" mask="url(#mask-leg-viewer-right-with-arm-removed)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+              </g>
+
+              <g id="torso-output-wrapper">
+                <g id="torso-base" mask="url(#mask-torso-with-arms-removed)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <!-- Same-RGBA torso texture closes the unavailable under-arm areas; no flat-color fill. -->
+                <g id="green-side-texture-seam" clip-path="url(#clip-green-side-texture-seam)">
+                  <image x="-70" href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="right-side-texture-seam" clip-path="url(#clip-right-side-texture-seam)">
+                  <image x="70" href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="arm-green-viewer-left" clip-path="url(#clip-support-arm)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="arm-viewer-right" clip-path="url(#clip-viewer-right-arm)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="green-shoulder-seam-cover" clip-path="url(#clip-green-shoulder-seam)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="right-shoulder-seam-cover" clip-path="url(#clip-right-shoulder-seam)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="green-lower-shoulder-seam-cover" clip-path="url(#clip-green-lower-shoulder-seam)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="right-lower-shoulder-seam-cover" clip-path="url(#clip-right-lower-shoulder-seam)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="head-output-wrapper" clip-path="url(#clip-head)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="collar-seam-cover" clip-path="url(#clip-collar-seam)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+
+                <g id="hip-seam-cover" mask="url(#mask-hip-seam-with-arms-removed)">
+                  <image href="assets/bela-seated-dot-rgba.png" xlink:href="assets/bela-seated-dot-rgba.png" width="863" height="1823" />
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+
+    const FPS = 30;
+    const LAST_FRAME = 149;
+    const END_TIME = LAST_FRAME / FPS;
+    const SOURCE_TO_SCREEN = 0.155 * 0.82;
+    const atFrame = (frame) => frame / FPS;
+    const sourceUnits = (screenPixels) => screenPixels / SOURCE_TO_SCREEN;
+    const tl = gsap.timeline({ paused: true });
+
+    // Smooth non-constant travel with a strictly positive derivative.
+    gsap.registerEase(
+      "inertiaDotTravel",
+      (progress) =>
+        progress
+        - 0.012 * Math.sin(Math.PI * 2 * progress)
+        - 0.005 * Math.sin(Math.PI * 4 * progress)
+        - 0.0025 * Math.sin(Math.PI * 8 * progress)
+    );
+
+    const addSvgSegments = (selector, pivot, keys, properties) => {
+      const initial = { svgOrigin: pivot };
+      for (const [property, valueIndex, convert] of properties) {
+        initial[property] = convert(keys[0][valueIndex]);
+      }
+      tl.set(selector, initial, 0);
+
+      for (let i = 1; i < keys.length; i += 1) {
+        const values = { duration: atFrame(keys[i][0] - keys[i - 1][0]), ease: "sine.inOut" };
+        for (const [property, valueIndex, convert] of properties) {
+          values[property] = convert(keys[i][valueIndex]);
+        }
+        tl.to(selector, values, atFrame(keys[i - 1][0]));
+      }
+    };
+
+    tl.fromTo(
+      "#ride-root",
+      { x: 92 },
+      { x: 812, duration: END_TIME, ease: "inertiaDotTravel", immediateRender: true },
+      0
+    );
+
+    tl.fromTo(
+      "#progress-complete",
+      { scaleX: 92 / 864 },
+      { scaleX: 1, duration: END_TIME, ease: "inertiaDotTravel", immediateRender: true },
+      0
+    );
+
+    addSvgSegments("#character-inertia-wrapper", "435 1240", [
+      [0, -2], [8, -2.6], [19, -3.5], [31, -3.9], [44, -3.25], [61, -2.7],
+      [82, -3.45], [95, -3.85], [108, -3], [122, -2.55], [136, -3.4], [149, -3.75]
+    ], [["x", 1, sourceUnits]]);
+
+    addSvgSegments("#torso-output-wrapper", "435 950", [
+      [0, 0], [9, -0.55], [19, -0.9], [31, -0.25], [43, 0.4], [58, -0.4],
+      [73, 0.28], [82, -0.18], [95, 0.78], [109, -0.62], [122, 0.15],
+      [136, -0.72], [149, -0.28]
+    ], [["rotation", 1, (value) => value]]);
+
+    addSvgSegments("#torso-output-wrapper", "435 950", [
+      [0, 0], [7, 0.65], [17, 1.15], [28, 0.25], [41, -0.75], [55, 0.45],
+      [70, -0.35], [84, 0.2], [98, 0.95], [113, -0.55], [127, 0.35],
+      [141, -0.7], [149, -0.15]
+    ], [["y", 1, sourceUnits]]);
+
+    addSvgSegments("#head-output-wrapper", "435 635", [
+      [0, -0.2], [18, -0.7], [29, -1.2], [41, -0.5], [53, 0.35], [66, -0.55],
+      [85, -0.7], [104, 0.2], [125, -0.45], [149, -0.25]
+    ], [["x", 1, sourceUnits]]);
+
+    addSvgSegments("#head-output-wrapper", "435 635", [
+      [0, -0.15], [12, -0.55], [22, -1.15], [31, -1.55], [40, -0.35],
+      [49, 0.65], [58, -0.95], [70, -0.3], [86, 0.35], [103, -0.6],
+      [121, 0.25], [138, -0.45], [149, -0.12]
+    ], [["rotation", 1, (value) => value]]);
+
+    addSvgSegments("#head-output-wrapper", "435 635", [
+      [0, 0], [18, 0.15], [30, 0.65], [40, 1.25], [50, 0.35], [61, 0.85],
+      [75, 0.1], [94, 0.55], [112, -0.15], [131, 0.45], [149, 0.15]
+    ], [["y", 1, sourceUnits]]);
+
+    addSvgSegments("#legs-common-inertia", "495 945", [
+      [0, 0], [14, -0.45], [31, 0.35], [49, -0.55], [68, 0.28],
+      [87, -0.42], [106, 0.38], [124, -0.35], [141, 0.22], [149, 0.05]
+    ], [["rotation", 1, (value) => value]]);
+
+    addSvgSegments("#leg-viewer-left", "420 950", [
+      [0, -2], [8, -6.9], [20, 2.8], [34, 5], [49, -3.8], [65, 4.7],
+      [82, -5.2], [97, 7], [116, -6.7], [133, 5.6], [149, -3.8]
+    ], [["rotation", 1, (value) => value]]);
+
+    addSvgSegments("#leg-viewer-right", "565 945", [
+      [0, 2.5], [14, 5.7], [28, -4.6], [43, 4], [58, -4.2], [75, 6.9],
+      [93, -6.2], [110, 5.6], [127, -6.9], [143, 6.3], [149, 4.4]
+    ], [["rotation", 1, (value) => value]]);
+
+    addSvgSegments("#arm-green-viewer-left", "340 650", [
+      [0, 0], [12, 1.5], [21, 5.5], [29, 12.5], [36, 17.5], [44, 10.5],
+      [52, 16.2], [61, 8.8], [70, 13.2], [80, 5], [92, 1.2], [111, 3.5],
+      [130, 6.5], [149, 9.8]
+    ], [["rotation", 1, (value) => value]]);
+
+    addSvgSegments("#arm-viewer-right", "535 650", [
+      [0, 0], [25, 0], [39, -1.8], [55, -3.8], [72, -1.5], [91, -4.5],
+      [108, -7.5], [119, -9], [134, -4.2], [149, -6.8]
+    ], [["rotation", 1, (value) => value]]);
+
+    window.__timelines["bela-seated-progress-cursor"] = tl;
+    tl.seek(0);
+  </script>
+</template>

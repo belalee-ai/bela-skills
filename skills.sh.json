@@ -7,6 +7,7 @@
       "description": "接续剪辑工程，规划口播与 B-roll 配画。",
       "skills": [
         "bela-video-editing",
+        "bela-channels-recut",
         "bela-broll"
       ]
     },
@@ -27,9 +28,11 @@
       "skills": [
         "bela-text-motion-library",
         "bela-jindutiao",
+        "bela-progress-companion",
         "bela-motion-director",
         "bela-ip-pic",
         "bela-ai-xhs-cover-director",
+        "bela-wechat-cover",
         "bela-hand-comic",
         "bela-videoframe-art",
         "bela-app-icon-picker"

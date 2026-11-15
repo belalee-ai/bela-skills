@@ -29,3 +29,11 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 本地旧名 `lidali-ai-content-editing` 对应公开版 `bela-video-editing`，`belalee-broll` 对应 `bela-broll`，`tactful-replies` 对应 `bela-tactful-replies`。
 
 本地旧名 `ameng-tiny-png` 对应 [`bela-tiny-png`](skills/bela-tiny-png/SKILL.md)。
+
+## 视频号剪辑与角色素材
+
+三个原本只在作者本机安装的 Skill 已加入合集，可按需安装：
+
+```bash
+npx skills add belalee-ai/bela-skills --skill bela-channels-recut --skill bela-progress-companion --skill bela-wechat-cover
+```

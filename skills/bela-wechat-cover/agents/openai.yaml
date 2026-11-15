@@ -1,0 +1,4 @@
+interface:
+  display_name: "贝拉视频号 Cover"
+  short_description: "结合DBS、热点与竞品结构给标题和视觉选择，确认后生成青柠玫粉真人封面"
+  default_prompt: "使用 $bela-wechat-cover，结合我的素材、DBS 标题公式与适用的热点资讯逻辑，先给标题选择和推荐封面方案，确认后生成并检查 3:4 成品。"

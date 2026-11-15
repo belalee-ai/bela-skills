@@ -1,0 +1,5 @@
+interface:
+  display_name: "贝拉进度条搭子"
+  short_description: "生成四种贝拉小人进度条，并校验小红书安全区与真实播放"
+  brand_color: "#FFAAC1"
+  default_prompt: "使用 $bela-progress-companion 为这条视频生成贝拉小人物进度条，并先确认文字与人物移动模式。"

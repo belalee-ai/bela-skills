@@ -1,6 +1,6 @@
 # Bela Skills
 
-李贝拉 Bela 的 Agent Skill 精选集。26 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通、简报和日常工具。
+李贝拉 Bela 的 Agent Skill 精选集。29 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通、简报和日常工具。
 
 [![skills.sh](https://skills.sh/b/belalee-ai/bela-skills)](https://skills.sh/belalee-ai/bela-skills)
 
@@ -85,6 +85,7 @@ npx skills add belalee-ai/bela-skills --list
 | Skill | 用途 |
 | --- | --- |
 | [个人剪辑 · `bela-video-editing`](skills/bela-video-editing/SKILL.md) | 从现有口播、录屏或剪辑工程接续，交付粗剪、字幕、动效或验收。 |
+| [视频号口播剪辑 · `bela-channels-recut`](skills/bela-channels-recut/SKILL.md) | 把录好的竖屏口播剪成带实拍素材、双语字幕和动效的视频。 |
 | [B-roll 配画 · `bela-broll`](skills/bela-broll/SKILL.md) | 按口播节点设计补充画面，确定风格、人物连续性和实现路线。 |
 
 <details>
@@ -94,6 +95,12 @@ npx skills add belalee-ai/bela-skills --list
 
 ```bash
 npx skills add belalee-ai/bela-skills --skill bela-video-editing
+```
+
+视频号口播剪辑
+
+```bash
+npx skills add belalee-ai/bela-skills --skill bela-channels-recut
 ```
 
 B-roll 配画
@@ -161,9 +168,11 @@ npx skills add belalee-ai/bela-skills --skill bela-video-topics
 | --- | --- |
 | [文字动效库 · `bela-text-motion-library`](skills/bela-text-motion-library/SKILL.md) | 挑选并复用标题、关键词和片头动效，附实现代码。 |
 | [章节进度条 · `bela-jindutiao`](skills/bela-jindutiao/SKILL.md) | 为口播或教程设计章节导航，附可运行的进度逻辑和预览。 |
+| [进度条搭子 · `bela-progress-companion`](skills/bela-progress-companion/SKILL.md) | 为已确认需要贝拉角色的进度条制作角色动作与可编辑叠加素材。 |
 | [动效导演 · `bela-motion-director`](skills/bela-motion-director/SKILL.md) | 先为短视频或网页选动效机制，再做一段可验证的样片。 |
 | [贝拉小人物 IP · `bela-ip-pic`](skills/bela-ip-pic/SKILL.md) | 围绕贝拉小人物及随包参考，制作保持角色一致性的手绘视觉（作者 IP 专用）。 |
 | [小红书封面 · `bela-ai-xhs-cover-director`](skills/bela-ai-xhs-cover-director/SKILL.md) | 根据内容类型和证据设计封面，保留小尺寸阅读焦点。 |
+| [视频号封面 · `bela-wechat-cover`](skills/bela-wechat-cover/SKILL.md) | 为视频号拟标题，确认后生成并检查 3:4 真人封面。 |
 | [手绘漫画 · `bela-hand-comic`](skills/bela-hand-comic/SKILL.md) | 把概念、故事和关系画成好懂的手绘漫画。 |
 | [视频帧艺术化 · `bela-videoframe-art`](skills/bela-videoframe-art/SKILL.md) | 从指定视频抽帧，选定参考帧和风格后生成艺术图。 |
 | [App 图标提取 · `bela-app-icon-picker`](skills/bela-app-icon-picker/SKILL.md) | 提取并整理应用图标，输出可用的透明 PNG。 |
@@ -183,6 +192,12 @@ npx skills add belalee-ai/bela-skills --skill bela-text-motion-library
 npx skills add belalee-ai/bela-skills --skill bela-jindutiao
 ```
 
+进度条搭子
+
+```bash
+npx skills add belalee-ai/bela-skills --skill bela-progress-companion
+```
+
 动效导演
 
 ```bash
@@ -199,6 +214,12 @@ npx skills add belalee-ai/bela-skills --skill bela-ip-pic
 
 ```bash
 npx skills add belalee-ai/bela-skills --skill bela-ai-xhs-cover-director
+```
+
+视频号封面
+
+```bash
+npx skills add belalee-ai/bela-skills --skill bela-wechat-cover
 ```
 
 手绘漫画
@@ -229,7 +250,7 @@ npx skills add belalee-ai/bela-skills --skill bela-app-icon-picker
 | Skill | 用途 |
 | --- | --- |
 | [视频号拆解归档 · `bela-wechat-video-download-copy-to-lark`](skills/bela-wechat-video-download-copy-to-lark/SKILL.md) | 按时间轴拆视频号链接，按用户配置归档到飞书。 |
-| [视频号口播复刻 · `bela-channels-remake`](skills/bela-channels-remake/SKILL.md) | 沿用参考视频的结构和节奏，重写口播和镜头表（作者专用，部分旧依赖未收录）。 |
+| [视频号口播复刻 · `bela-channels-remake`](skills/bela-channels-remake/SKILL.md) | 沿用参考视频的结构和节奏，重写口播和镜头表（作者工作流）。 |
 | [小红书笔记拆解 · `bela-xhs-analysis`](skills/bela-xhs-analysis/SKILL.md) | 读取并分析单篇小红书笔记，提炼内容结构。 |
 
 <details>
@@ -373,7 +394,10 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 | `bela-broll`、`bela-ai-news-video`、`bela-text-motion-library` | 正文引用 `bela-video-editing` 的流程或参考文件，使用相应流程时一并安装。 |
 | `bela-video-editing` | 根据任务使用 ChatCut 等工具；需要章节进度条时，另装 `bela-jindutiao`。其他配套项见其工具清单。 |
 | `bela-spoken-script` | 可单独写稿；继续制作视频时再配合 `bela-video-editing`。 |
-| `bela-channels-remake` | 目前仍是作者个人工作流，包含 Lidali 专用表述和个人资料来源；引用的 `bela-channels-recut` 尚未收录，相关剪辑衔接不能直接使用。 |
+| `bela-channels-remake` | 沿用作者的策划方式；录制后接剪辑时可一并安装 `bela-channels-recut`。 |
+| `bela-channels-recut` | 需自备原片和素材。Hypit 优先，或使用随包 Remotion 模板；分别配置依赖。 |
+| `bela-progress-companion` | 先配合 `bela-jindutiao` 判断是否需要角色。随包提供角色素材、分层模板和动作参考。 |
+| `bela-wechat-cover` | 标题与版式可先准备；生成成品需图片生成工具和当次真人照片。DBS 标题库可选。 |
 | `bela-ip-pic` | 围绕作者的 Bela 角色与参考资产工作，不是通用的人物替换工具。 |
 | `bela-wechat-video-download-copy-to-lark` | 依赖视频号下载、Hypit、飞书 CLI、FFmpeg、转录等工具与配套 Skill；先配置自己的账号、权限和归档位置，并通过其依赖检查。 |
 | `bela-xhs-analysis` | 依赖可用的内容读取工具或 Python 路径；需要登录态时使用自己的账号配置。 |
