@@ -7,7 +7,7 @@
       "category": "视频制作",
       "title": "个人剪辑",
       "summary": "从现有口播、录屏或剪辑工程接续，交付粗剪、字幕、动效或验收。",
-      "path": "bela-video-editing/SKILL.md",
+      "path": "skills/bela-video-editing/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -15,7 +15,7 @@
       "category": "选题与口播",
       "title": "口播稿",
       "summary": "把选题或参考稿改成可以直接录的口播。",
-      "path": "bela-spoken-script/SKILL.md",
+      "path": "skills/bela-spoken-script/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -23,7 +23,7 @@
       "category": "选题与口播",
       "title": "AI 新闻视频",
       "summary": "核实热点事实，整理口播、真实素材和分镜。",
-      "path": "bela-ai-news-video/SKILL.md",
+      "path": "skills/bela-ai-news-video/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -31,7 +31,7 @@
       "category": "动效与视觉",
       "title": "文字动效库",
       "summary": "挑选并复用标题、关键词和片头动效，附实现代码。",
-      "path": "bela-text-motion-library/SKILL.md",
+      "path": "skills/bela-text-motion-library/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -39,7 +39,7 @@
       "category": "动效与视觉",
       "title": "章节进度条",
       "summary": "为口播或教程设计章节导航，附可运行的进度逻辑和预览。",
-      "path": "bela-jindutiao/SKILL.md",
+      "path": "skills/bela-jindutiao/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -47,21 +47,21 @@
       "category": "动效与视觉",
       "title": "动效导演",
       "summary": "先为短视频或网页选动效机制，再做一段可验证的样片。",
-      "path": "bela-motion-director/SKILL.md"
+      "path": "skills/bela-motion-director/SKILL.md"
     },
     {
       "name": "bela-ip-pic",
       "category": "动效与视觉",
       "title": "贝拉小人物 IP",
-      "summary": "用贝拉原创小人物或自己的角色参考做一致的手绘视觉。",
-      "path": "bela-ip-pic/SKILL.md"
+      "summary": "围绕贝拉小人物及随包参考，制作保持角色一致性的手绘视觉（作者 IP 专用）。",
+      "path": "skills/bela-ip-pic/SKILL.md"
     },
     {
       "name": "bela-broll",
       "category": "视频制作",
       "title": "B-roll 配画",
       "summary": "按口播节点设计补充画面，确定风格、人物连续性和实现路线。",
-      "path": "bela-broll/SKILL.md",
+      "path": "skills/bela-broll/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -69,7 +69,7 @@
       "category": "动效与视觉",
       "title": "小红书封面",
       "summary": "根据内容类型和证据设计封面，保留小尺寸阅读焦点。",
-      "path": "bela-ai-xhs-cover-director/SKILL.md",
+      "path": "skills/bela-ai-xhs-cover-director/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
@@ -77,42 +77,42 @@
       "category": "选题与口播",
       "title": "小红书选题",
       "summary": "根据账号方向和真实使用证据排序可拍选题。",
-      "path": "bela-topic-picker/SKILL.md"
+      "path": "skills/bela-topic-picker/SKILL.md"
     },
     {
       "name": "bela-wechat-video-download-copy-to-lark",
       "category": "拆解与归档",
       "title": "视频号拆解归档",
       "summary": "按时间轴拆视频号链接，按用户配置归档到飞书。",
-      "path": "bela-wechat-video-download-copy-to-lark/SKILL.md"
+      "path": "skills/bela-wechat-video-download-copy-to-lark/SKILL.md"
     },
     {
       "name": "bela-channels-remake",
       "category": "拆解与归档",
       "title": "视频号口播复刻",
-      "summary": "沿用参考视频的结构和节奏，重写自己的口播和镜头表。",
-      "path": "bela-channels-remake/SKILL.md"
+      "summary": "沿用参考视频的结构和节奏，重写口播和镜头表（作者专用，部分旧依赖未收录）。",
+      "path": "skills/bela-channels-remake/SKILL.md"
     },
     {
       "name": "bela-xhs-analysis",
       "category": "拆解与归档",
       "title": "小红书笔记拆解",
       "summary": "读取并分析单篇小红书笔记，提炼内容结构。",
-      "path": "bela-xhs-analysis/SKILL.md"
+      "path": "skills/bela-xhs-analysis/SKILL.md"
     },
     {
       "name": "bela-tactful-replies",
       "category": "阅读与沟通",
       "title": "高情商回复",
       "summary": "按关系、目的和场合提供可直接说出口的回复。",
-      "path": "bela-tactful-replies/SKILL.md"
+      "path": "skills/bela-tactful-replies/SKILL.md"
     },
     {
       "name": "bela-hand-comic",
       "category": "动效与视觉",
       "title": "手绘漫画",
       "summary": "把概念、故事和关系画成好懂的手绘漫画。",
-      "path": "bela-hand-comic/SKILL.md",
+      "path": "skills/bela-hand-comic/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-hand-comic"
     },
     {
@@ -120,7 +120,7 @@
       "category": "动效与视觉",
       "title": "视频帧艺术化",
       "summary": "从指定视频抽帧，选定参考帧和风格后生成艺术图。",
-      "path": "bela-videoframe-art/SKILL.md",
+      "path": "skills/bela-videoframe-art/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-videoframe-art"
     },
     {
@@ -128,7 +128,7 @@
       "category": "阅读与沟通",
       "title": "一页读书",
       "summary": "根据原书生成梗概、脑图和可回溯到出处的阅读路线。",
-      "path": "bela-one-page-book/SKILL.md",
+      "path": "skills/bela-one-page-book/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-One-page-book"
     },
     {
@@ -136,7 +136,7 @@
       "category": "开发与发布",
       "title": "GitHub 发布",
       "summary": "为 Skill、应用或工具准备 README、真实截图和安装说明。",
-      "path": "bela-github-publish/SKILL.md",
+      "path": "skills/bela-github-publish/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-tools"
     },
     {
@@ -144,7 +144,7 @@
       "category": "开发与发布",
       "title": "Skill 体检",
       "summary": "检查重复、膨胀和路由冲突，给出清理方案。",
-      "path": "bela-skill-hygiene/SKILL.md",
+      "path": "skills/bela-skill-hygiene/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/skill-hygiene"
     },
     {
@@ -152,7 +152,7 @@
       "category": "信息简报",
       "title": "职位日报",
       "summary": "根据岗位、城市和行业整理有来源的职位更新。",
-      "path": "bela-daily-job-briefing/SKILL.md",
+      "path": "skills/bela-daily-job-briefing/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/daily-job-briefing"
     },
     {
@@ -160,7 +160,7 @@
       "category": "信息简报",
       "title": "AI 日报",
       "summary": "跟进 AI 新闻并整理成带来源的简报。",
-      "path": "bela-daily-briefing/SKILL.md",
+      "path": "skills/bela-daily-briefing/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
     },
     {
@@ -168,7 +168,7 @@
       "category": "选题与口播",
       "title": "内容规划",
       "summary": "根据创作方向和发布节奏整理阶段计划。",
-      "path": "bela-content-planner/SKILL.md",
+      "path": "skills/bela-content-planner/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
     },
     {
@@ -176,7 +176,7 @@
       "category": "选题与口播",
       "title": "视频选题草案",
       "summary": "把用户主题展开为不同角度的视频选题。",
-      "path": "bela-video-topics/SKILL.md",
+      "path": "skills/bela-video-topics/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
     },
     {
@@ -184,14 +184,14 @@
       "category": "动效与视觉",
       "title": "App 图标提取",
       "summary": "提取并整理应用图标，输出可用的透明 PNG。",
-      "path": "bela-app-icon-picker/SKILL.md"
+      "path": "skills/bela-app-icon-picker/SKILL.md"
     },
     {
       "name": "bela-cart-savings-advisor",
       "category": "日常实用工具",
       "title": "购物车比价",
       "summary": "从购物车截图整理优惠、拆单与预计到手价。",
-      "path": "bela-cart-savings-advisor/SKILL.md",
+      "path": "skills/bela-cart-savings-advisor/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/bela-tools"
     },
     {
@@ -199,7 +199,7 @@
       "category": "日常实用工具",
       "title": "图片压缩",
       "summary": "用 TinyPNG API 批量压缩、缩放及转换图片格式。",
-      "path": "bela-tiny-png/SKILL.md"
+      "path": "skills/bela-tiny-png/SKILL.md"
     }
   ]
 }

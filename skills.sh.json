@@ -1,0 +1,80 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "视频制作",
+      "description": "接续剪辑工程，规划口播与 B-roll 配画。",
+      "skills": [
+        "bela-video-editing",
+        "bela-broll"
+      ]
+    },
+    {
+      "title": "选题与口播",
+      "description": "从内容方向和真实证据出发，整理选题、计划与口播。",
+      "skills": [
+        "bela-spoken-script",
+        "bela-ai-news-video",
+        "bela-topic-picker",
+        "bela-content-planner",
+        "bela-video-topics"
+      ]
+    },
+    {
+      "title": "动效与视觉",
+      "description": "制作封面、漫画、角色视觉、章节导航与文字动效。",
+      "skills": [
+        "bela-text-motion-library",
+        "bela-jindutiao",
+        "bela-motion-director",
+        "bela-ip-pic",
+        "bela-ai-xhs-cover-director",
+        "bela-hand-comic",
+        "bela-videoframe-art",
+        "bela-app-icon-picker"
+      ]
+    },
+    {
+      "title": "拆解与归档",
+      "description": "分析参考内容，整理复刻思路与可追溯的归档。",
+      "skills": [
+        "bela-wechat-video-download-copy-to-lark",
+        "bela-channels-remake",
+        "bela-xhs-analysis"
+      ]
+    },
+    {
+      "title": "阅读与沟通",
+      "description": "整理阅读线索，按具体关系和场合组织表达。",
+      "skills": [
+        "bela-tactful-replies",
+        "bela-one-page-book"
+      ]
+    },
+    {
+      "title": "开发与发布",
+      "description": "整理项目展示，检查 Skill 的结构和重复能力。",
+      "skills": [
+        "bela-github-publish",
+        "bela-skill-hygiene"
+      ]
+    },
+    {
+      "title": "信息简报",
+      "description": "收集有来源的 AI 新闻和职位更新。",
+      "skills": [
+        "bela-daily-job-briefing",
+        "bela-daily-briefing"
+      ]
+    },
+    {
+      "title": "日常实用工具",
+      "description": "处理购物比价和本地图片压缩等日常任务。",
+      "skills": [
+        "bela-cart-savings-advisor",
+        "bela-tiny-png"
+      ]
+    }
+  ]
+}
