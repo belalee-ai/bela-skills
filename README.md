@@ -1,6 +1,6 @@
 # Bela Skills
 
-李贝拉 Bela 的 Agent Skill 精选集。29 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通、简报和日常工具。
+李贝拉 Bela 的 Agent Skill 精选集。30 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通、简报和日常工具。
 
 [![skills.sh](https://skills.sh/b/belalee-ai/bela-skills)](https://skills.sh/belalee-ai/bela-skills)
 
@@ -176,6 +176,7 @@ npx skills add belalee-ai/bela-skills --skill bela-video-topics
 | [手绘漫画 · `bela-hand-comic`](skills/bela-hand-comic/SKILL.md) | 把概念、故事和关系画成好懂的手绘漫画。 |
 | [视频帧艺术化 · `bela-videoframe-art`](skills/bela-videoframe-art/SKILL.md) | 从指定视频抽帧，选定参考帧和风格后生成艺术图。 |
 | [App 图标提取 · `bela-app-icon-picker`](skills/bela-app-icon-picker/SKILL.md) | 提取并整理应用图标，输出可用的透明 PNG。 |
+| [手写字转字体 · `bela-draw-your-font`](skills/bela-draw-your-font/SKILL.md) | 从手写字照片生成可安装的 TTF 字体，也可导出 WOFF、WOFF2 和 CSS。 |
 
 <details>
 <summary>动效与视觉：单项安装命令</summary>
@@ -238,6 +239,12 @@ App 图标提取
 
 ```bash
 npx skills add belalee-ai/bela-skills --skill bela-app-icon-picker
+```
+
+手写字转字体
+
+```bash
+npx skills add belalee-ai/bela-skills --skill bela-draw-your-font
 ```
 
 </details>
@@ -403,6 +410,7 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 | `bela-xhs-analysis` | 依赖可用的内容读取工具或 Python 路径；需要登录态时使用自己的账号配置。 |
 | `bela-skill-hygiene` | 可检查 Claude Code 或指定的 Codex Skill 目录；插件清单和 Hook 示例仅适用于 Claude Code。 |
 | `bela-tiny-png` | 需要 TinyPNG API key 与 Python 依赖；运行时会上传待处理图片，留意服务配额。 |
+| `bela-draw-your-font` | 需要 Node.js ≥ 18，首次运行可能需要通过 npm 安装 CLI，字体在本地生成。改编自 [Danilo Znamerovszkij 的 draw-your-font](https://github.com/danilo-znamerovszkij/draw-your-font)，保留 MIT 许可。 |
 | 漫画、封面、IP、视频帧艺术化等视觉任务 | 需要对应的图片生成或编辑能力；安装 Skill 本身不会提供生成服务。 |
 
 例如，安装 B-roll 配画及其配套流程：

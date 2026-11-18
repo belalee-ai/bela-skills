@@ -208,6 +208,13 @@
       "path": "skills/bela-app-icon-picker/SKILL.md"
     },
     {
+      "name": "bela-draw-your-font",
+      "category": "动效与视觉",
+      "title": "手写字转字体",
+      "summary": "从手写字照片生成可安装的 TTF 字体，也可导出 WOFF、WOFF2 和 CSS。",
+      "path": "skills/bela-draw-your-font/SKILL.md"
+    },
+    {
       "name": "bela-cart-savings-advisor",
       "category": "日常实用工具",
       "title": "购物车比价",

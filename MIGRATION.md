@@ -30,6 +30,8 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 
 本地旧名 `ameng-tiny-png` 对应 [`bela-tiny-png`](skills/bela-tiny-png/SKILL.md)。
 
+本地使用的上游 `draw-your-font` 对应合集适配版 [`bela-draw-your-font`](skills/bela-draw-your-font/SKILL.md)。CLI 继续使用上游 npm 包，适配版随附原 MIT 许可。
+
 ## 视频号剪辑与角色素材
 
 三个原本只在作者本机安装的 Skill 已加入合集，可按需安装：
