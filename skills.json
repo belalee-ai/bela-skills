@@ -161,46 +161,6 @@
       "previousRepository": "https://github.com/belalee-ai/bela-tools"
     },
     {
-      "name": "bela-skill-hygiene",
-      "category": "开发与发布",
-      "title": "Skill 体检",
-      "summary": "检查重复、膨胀和路由冲突，给出清理方案。",
-      "path": "skills/bela-skill-hygiene/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/skill-hygiene"
-    },
-    {
-      "name": "bela-daily-job-briefing",
-      "category": "信息简报",
-      "title": "职位日报",
-      "summary": "根据岗位、城市和行业整理有来源的职位更新。",
-      "path": "skills/bela-daily-job-briefing/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/daily-job-briefing"
-    },
-    {
-      "name": "bela-daily-briefing",
-      "category": "信息简报",
-      "title": "AI 日报",
-      "summary": "跟进 AI 新闻并整理成带来源的简报。",
-      "path": "skills/bela-daily-briefing/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
-    },
-    {
-      "name": "bela-content-planner",
-      "category": "选题与口播",
-      "title": "内容规划",
-      "summary": "根据创作方向和发布节奏整理阶段计划。",
-      "path": "skills/bela-content-planner/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
-    },
-    {
-      "name": "bela-video-topics",
-      "category": "选题与口播",
-      "title": "视频选题草案",
-      "summary": "把用户主题展开为不同角度的视频选题。",
-      "path": "skills/bela-video-topics/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/bela-content-creator"
-    },
-    {
       "name": "bela-app-icon-picker",
       "category": "动效与视觉",
       "title": "App 图标提取",

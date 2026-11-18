@@ -17,9 +17,7 @@
       "skills": [
         "bela-spoken-script",
         "bela-ai-news-video",
-        "bela-topic-picker",
-        "bela-content-planner",
-        "bela-video-topics"
+        "bela-topic-picker"
       ]
     },
     {
@@ -60,16 +58,7 @@
       "title": "开发与发布",
       "description": "整理项目展示，检查 Skill 的结构和重复能力。",
       "skills": [
-        "bela-github-publish",
-        "bela-skill-hygiene"
-      ]
-    },
-    {
-      "title": "信息简报",
-      "description": "收集有来源的 AI 新闻和职位更新。",
-      "skills": [
-        "bela-daily-job-briefing",
-        "bela-daily-briefing"
+        "bela-github-publish"
       ]
     },
     {

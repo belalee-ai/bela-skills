@@ -1,6 +1,6 @@
 # Bela Skills
 
-李贝拉 Bela 的 Agent Skill 精选集。30 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通、简报和日常工具。
+李贝拉 Bela 的 Agent Skill 精选集。25 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通和日常工具。
 
 [![skills.sh](https://skills.sh/b/belalee-ai/bela-skills)](https://skills.sh/belalee-ai/bela-skills)
 
@@ -121,8 +121,6 @@ npx skills add belalee-ai/bela-skills --skill bela-broll
 | [口播稿 · `bela-spoken-script`](skills/bela-spoken-script/SKILL.md) | 把选题或参考稿改成可以直接录的口播。 |
 | [AI 新闻视频 · `bela-ai-news-video`](skills/bela-ai-news-video/SKILL.md) | 核实热点事实，整理口播、真实素材和分镜。 |
 | [小红书选题 · `bela-topic-picker`](skills/bela-topic-picker/SKILL.md) | 根据账号方向和真实使用证据排序可拍选题。 |
-| [内容规划 · `bela-content-planner`](skills/bela-content-planner/SKILL.md) | 根据创作方向和发布节奏整理阶段计划。 |
-| [视频选题草案 · `bela-video-topics`](skills/bela-video-topics/SKILL.md) | 把用户主题展开为不同角度的视频选题。 |
 
 <details>
 <summary>选题与口播：单项安装命令</summary>
@@ -143,18 +141,6 @@ npx skills add belalee-ai/bela-skills --skill bela-ai-news-video
 
 ```bash
 npx skills add belalee-ai/bela-skills --skill bela-topic-picker
-```
-
-内容规划
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-content-planner
-```
-
-视频选题草案
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-video-topics
 ```
 
 </details>
@@ -318,7 +304,6 @@ npx skills add belalee-ai/bela-skills --skill bela-one-page-book
 | Skill | 用途 |
 | --- | --- |
 | [GitHub 发布 · `bela-github-publish`](skills/bela-github-publish/SKILL.md) | 为 Skill、应用或工具准备 README、真实截图和安装说明。 |
-| [Skill 体检 · `bela-skill-hygiene`](skills/bela-skill-hygiene/SKILL.md) | 检查重复、膨胀和路由冲突，给出清理方案。 |
 
 <details>
 <summary>开发与发布：单项安装命令</summary>
@@ -329,40 +314,12 @@ GitHub 发布
 npx skills add belalee-ai/bela-skills --skill bela-github-publish
 ```
 
-Skill 体检
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-skill-hygiene
-```
-
 </details>
 
 
 ### 信息简报
 
-收集有来源的 AI 新闻和职位更新。
-
-| Skill | 用途 |
-| --- | --- |
-| [职位日报 · `bela-daily-job-briefing`](skills/bela-daily-job-briefing/SKILL.md) | 根据岗位、城市和行业整理有来源的职位更新。 |
-| [AI 日报 · `bela-daily-briefing`](skills/bela-daily-briefing/SKILL.md) | 跟进 AI 新闻并整理成带来源的简报。 |
-
-<details>
-<summary>信息简报：单项安装命令</summary>
-
-职位日报
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-daily-job-briefing
-```
-
-AI 日报
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-daily-briefing
-```
-
-</details>
+[查看职位日报与 AI 日报的历史版本](MIGRATION.md#历史版本)
 
 
 ### 日常实用工具
@@ -408,7 +365,6 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 | `bela-ip-pic` | 围绕作者的 Bela 角色与参考资产工作，不是通用的人物替换工具。 |
 | `bela-wechat-video-download-copy-to-lark` | 依赖视频号下载、Hypit、飞书 CLI、FFmpeg、转录等工具与配套 Skill；先配置自己的账号、权限和归档位置，并通过其依赖检查。 |
 | `bela-xhs-analysis` | 依赖可用的内容读取工具或 Python 路径；需要登录态时使用自己的账号配置。 |
-| `bela-skill-hygiene` | 可检查 Claude Code 或指定的 Codex Skill 目录；插件清单和 Hook 示例仅适用于 Claude Code。 |
 | `bela-tiny-png` | 需要 TinyPNG API key 与 Python 依赖；运行时会上传待处理图片，留意服务配额。 |
 | `bela-draw-your-font` | 需要 Node.js ≥ 18，首次运行可能需要通过 npm 安装 CLI，字体在本地生成。改编自 [Danilo Znamerovszkij 的 draw-your-font](https://github.com/danilo-znamerovszkij/draw-your-font)，保留 MIT 许可。 |
 | 漫画、封面、IP、视频帧艺术化等视觉任务 | 需要对应的图片生成或编辑能力；安装 Skill 本身不会提供生成服务。 |

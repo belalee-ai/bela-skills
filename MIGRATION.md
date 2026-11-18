@@ -21,10 +21,10 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 | [bela-hand-comic](https://github.com/belalee-ai/bela-hand-comic) | [`bela-hand-comic`](skills/bela-hand-comic/SKILL.md) |
 | [bela-videoframe-art](https://github.com/belalee-ai/bela-videoframe-art) | [`bela-videoframe-art`](skills/bela-videoframe-art/SKILL.md) |
 | [bela-One-page-book](https://github.com/belalee-ai/bela-One-page-book) | [`bela-one-page-book`](skills/bela-one-page-book/SKILL.md) |
-| [bela-tools](https://github.com/belalee-ai/bela-tools) | [`bela-github-publish`](skills/bela-github-publish/SKILL.md)、[`bela-skill-hygiene`](skills/bela-skill-hygiene/SKILL.md)、[`bela-cart-savings-advisor`](skills/bela-cart-savings-advisor/SKILL.md) |
-| [skill-hygiene](https://github.com/belalee-ai/skill-hygiene) | [`bela-skill-hygiene`](skills/bela-skill-hygiene/SKILL.md) |
-| [daily-job-briefing](https://github.com/belalee-ai/daily-job-briefing) | [`bela-daily-job-briefing`](skills/bela-daily-job-briefing/SKILL.md) |
-| [bela-content-creator](https://github.com/belalee-ai/bela-content-creator) | [`bela-daily-briefing`](skills/bela-daily-briefing/SKILL.md)、[`bela-content-planner`](skills/bela-content-planner/SKILL.md)、[`bela-video-topics`](skills/bela-video-topics/SKILL.md)、[`bela-topic-picker`](skills/bela-topic-picker/SKILL.md)、[`bela-daily-job-briefing`](skills/bela-daily-job-briefing/SKILL.md) |
+| [bela-tools](https://github.com/belalee-ai/bela-tools) | [`bela-github-publish`](skills/bela-github-publish/SKILL.md)、[`bela-skill-hygiene`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-skill-hygiene/SKILL.md)、[`bela-cart-savings-advisor`](skills/bela-cart-savings-advisor/SKILL.md) |
+| [skill-hygiene](https://github.com/belalee-ai/skill-hygiene) | [`bela-skill-hygiene`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-skill-hygiene/SKILL.md) |
+| [daily-job-briefing](https://github.com/belalee-ai/daily-job-briefing) | [`bela-daily-job-briefing`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-job-briefing/SKILL.md) |
+| [bela-content-creator](https://github.com/belalee-ai/bela-content-creator) | [`bela-daily-briefing`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-briefing/SKILL.md)、[`bela-content-planner`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-content-planner/SKILL.md)、[`bela-video-topics`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-video-topics/SKILL.md)、[`bela-topic-picker`](skills/bela-topic-picker/SKILL.md)、[`bela-daily-job-briefing`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-job-briefing/SKILL.md) |
 
 本地旧名 `lidali-ai-content-editing` 对应公开版 `bela-video-editing`，`belalee-broll` 对应 `bela-broll`，`tactful-replies` 对应 `bela-tactful-replies`。
 
@@ -39,3 +39,13 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 ```bash
 npx skills add belalee-ai/bela-skills --skill bela-channels-recut --skill bela-progress-companion --skill bela-wechat-cover
 ```
+
+## 历史版本
+
+2026-11-18，以下 Skill 从合集的当前安装列表下架。完整文件可从下架前的提交取回。
+
+- [内容规划 · bela-content-planner](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-content-planner)
+- [视频选题草案 · bela-video-topics](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-video-topics)
+- [Skill 体检 · bela-skill-hygiene](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-skill-hygiene)
+- [职位日报 · bela-daily-job-briefing](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-job-briefing)
+- [AI 日报 · bela-daily-briefing](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-briefing)
