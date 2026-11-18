@@ -86,7 +86,7 @@ npx skills add belalee-ai/bela-skills --list
 | --- | --- |
 | [个人剪辑 · `bela-video-editing`](skills/bela-video-editing/SKILL.md) | 从现有口播、录屏或剪辑工程接续，交付粗剪、字幕、动效或验收。 |
 | [视频号口播剪辑 · `bela-channels-recut`](skills/bela-channels-recut/SKILL.md) | 把录好的竖屏口播剪成带实拍素材、双语字幕和动效的视频。 |
-| [B-roll 配画 · `bela-broll`](skills/bela-broll/SKILL.md) | 按口播节点设计补充画面，确定风格、人物连续性和实现路线。 |
+| [B-roll 配画 · `bela-broll`](skills/bela-broll/SKILL.md) | 按口播节点设计补充画面，含五种风格参考、人物连续性和分阶段验收。 |
 
 <details>
 <summary>视频制作：单项安装命令</summary>

@@ -1,0 +1,4 @@
+interface:
+  display_name: "B-roll 素材导演"
+  short_description: "为口播选择实拍、信息动画、人物或隐喻，按已确认的风格制作并验收"
+  default_prompt: "使用 $bela-broll 为这段口播规划配画，按当前项目已确认的风格给出静态方案。"

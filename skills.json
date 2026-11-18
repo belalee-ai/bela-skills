@@ -74,7 +74,7 @@
       "name": "bela-broll",
       "category": "视频制作",
       "title": "B-roll 配画",
-      "summary": "按口播节点设计补充画面，确定风格、人物连续性和实现路线。",
+      "summary": "按口播节点设计补充画面，含五种风格参考、人物连续性和分阶段验收。",
       "path": "skills/bela-broll/SKILL.md",
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
