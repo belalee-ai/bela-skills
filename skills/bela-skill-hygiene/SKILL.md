@@ -6,7 +6,7 @@ argument-hint: "[audit | check <description> <name>]"
 
 # Skill Hygiene
 
-Keep your Claude Code skills lean. Detect overlaps, audit bloat, prevent prompt pollution.
+Audit installed skills in Claude Code or Codex. Detect overlaps, audit bloat, prevent prompt pollution.
 
 ## Core Principles
 
@@ -48,13 +48,24 @@ Produces a 5-section report:
 4. Health warnings — oversized directories, bundled deps, missing descriptions
 5. Archived skills — soft-deleted, recoverable
 
+### Audit a Codex directory
+
+```bash
+skill_dir="$HOME/.agents/skills/bela-skill-hygiene" # Adjust to this skill's installation path.
+audit_root="$HOME/.agents/skills" # Or "$HOME/.codex/skills" for legacy entries.
+SKILLS_DIR="$audit_root" SETTINGS_FILE=/dev/null AUDIT_LOG="$HOME/.codex/skills-audit.log" \
+  bash "$skill_dir/scripts/skill-audit.sh"
+```
+
+For a project, set audit_root to its .agents/skills directory. For a duplicate check, append --check-duplicate "<description>" "<name>" to the script command. The script audits one directory per run and compares English keywords. Its plugin report and hook example are specific to Claude Code.
+
 ### Archive a Skill
 
 ```bash
 mv ~/.claude/skills/<name> ~/.claude/skills/.archived-<name>
 ```
 
-Restore anytime by removing the `.archived-` prefix.
+Restore anytime by removing the `.archived-` prefix. For Codex, move the selected entry outside all scanned skills directories so it can be restored to its original location. Check whether it is a link before moving the underlying files.
 
 ## Thresholds
 
@@ -83,7 +94,7 @@ Restore anytime by removing the `.archived-` prefix.
 .claude/settings.local.json      → Same, but git-ignored (personal preferences)
 ```
 
-## Hook Integration (optional)
+## Claude Code Hook Integration (optional)
 
 Auto-remind before skill installs. Add to `~/.claude/settings.json`:
 

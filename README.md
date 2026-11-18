@@ -401,7 +401,7 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 | `bela-ip-pic` | 围绕作者的 Bela 角色与参考资产工作，不是通用的人物替换工具。 |
 | `bela-wechat-video-download-copy-to-lark` | 依赖视频号下载、Hypit、飞书 CLI、FFmpeg、转录等工具与配套 Skill；先配置自己的账号、权限和归档位置，并通过其依赖检查。 |
 | `bela-xhs-analysis` | 依赖可用的内容读取工具或 Python 路径；需要登录态时使用自己的账号配置。 |
-| `bela-skill-hygiene` | 当前体检脚本面向 Claude Code 的技能与配置目录；其他 Agent 需先核对适用范围。 |
+| `bela-skill-hygiene` | 可检查 Claude Code 或指定的 Codex Skill 目录；插件清单和 Hook 示例仅适用于 Claude Code。 |
 | `bela-tiny-png` | 需要 TinyPNG API key 与 Python 依赖；运行时会上传待处理图片，留意服务配额。 |
 | 漫画、封面、IP、视频帧艺术化等视觉任务 | 需要对应的图片生成或编辑能力；安装 Skill 本身不会提供生成服务。 |
 
