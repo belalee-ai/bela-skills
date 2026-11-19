@@ -11,7 +11,6 @@
 | [bela-jindutiao](../../bela-jindutiao/SKILL.md) | 章节/无标签、无人物/固定/跟随进度条，附配置与浏览器预览源码 |
 | [bela-ip-pic](../../bela-ip-pic/SKILL.md) | 用户自己的真人或 IP 静态素材 |
 | [bela-hand-comic](../../bela-hand-comic/SKILL.md) | 手绘故事、流程与关系图示 |
-| [bela-ai-news-video](../../bela-ai-news-video/SKILL.md) | 新闻事实、机制与真实素材 |
 | [bela-ai-xhs-cover-director](../../bela-ai-xhs-cover-director/SKILL.md) | 用户自己的封面方案 |
 | [bela-videoframe-art](../../bela-videoframe-art/SKILL.md) | 可信选帧与静帧转译 |
 | [bela-text-motion-library](../../bela-text-motion-library/SKILL.md) | 基础 001–030 的文字动作源码与载荷 |

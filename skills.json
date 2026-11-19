@@ -26,14 +26,6 @@
       "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
     },
     {
-      "name": "bela-ai-news-video",
-      "category": "选题与口播",
-      "title": "AI 新闻视频",
-      "summary": "核实热点事实，整理口播、真实素材和分镜。",
-      "path": "skills/bela-ai-news-video/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
-    },
-    {
       "name": "bela-text-motion-library",
       "category": "动效与视觉",
       "title": "文字动效库",

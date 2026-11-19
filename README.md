@@ -1,6 +1,6 @@
 # Bela Skills
 
-李贝拉 Bela 的 Agent Skill 精选集。25 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通和日常工具。
+李贝拉 Bela 的 Agent Skill 精选集。24 个 Skill，覆盖选题、口播、视频制作、视觉设计、内容拆解，也收录阅读、沟通和日常工具。
 
 [![skills.sh](https://skills.sh/b/belalee-ai/bela-skills)](https://skills.sh/belalee-ai/bela-skills)
 
@@ -119,7 +119,6 @@ npx skills add belalee-ai/bela-skills --skill bela-broll
 | Skill | 用途 |
 | --- | --- |
 | [口播稿 · `bela-spoken-script`](skills/bela-spoken-script/SKILL.md) | 把选题或参考稿改成可以直接录的口播。 |
-| [AI 新闻视频 · `bela-ai-news-video`](skills/bela-ai-news-video/SKILL.md) | 核实热点事实，整理口播、真实素材和分镜。 |
 | [小红书选题 · `bela-topic-picker`](skills/bela-topic-picker/SKILL.md) | 根据账号方向和真实使用证据排序可拍选题。 |
 
 <details>
@@ -129,12 +128,6 @@ npx skills add belalee-ai/bela-skills --skill bela-broll
 
 ```bash
 npx skills add belalee-ai/bela-skills --skill bela-spoken-script
-```
-
-AI 新闻视频
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-ai-news-video
 ```
 
 小红书选题
@@ -355,7 +348,7 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 
 | Skill / 场景 | 使用前确认 |
 | --- | --- |
-| `bela-broll`、`bela-ai-news-video`、`bela-text-motion-library` | 正文引用 `bela-video-editing` 的流程或参考文件，使用相应流程时一并安装。 |
+| `bela-broll`、`bela-text-motion-library` | 正文引用 `bela-video-editing` 的流程或参考文件，使用相应流程时一并安装。 |
 | `bela-video-editing` | 根据任务使用 ChatCut 等工具；需要章节进度条时，另装 `bela-jindutiao`。其他配套项见其工具清单。 |
 | `bela-spoken-script` | 可单独写稿；继续制作视频时再配合 `bela-video-editing`。 |
 | `bela-channels-remake` | 沿用作者的策划方式；录制后接剪辑时可一并安装 `bela-channels-recut`。 |

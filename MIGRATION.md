@@ -17,7 +17,7 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 
 | 旧仓库 | 合集入口 |
 | --- | --- |
-| [video-editing-workflow-bundle](https://github.com/belalee-ai/video-editing-workflow-bundle) | [`bela-video-editing`](skills/bela-video-editing/SKILL.md)、[`bela-spoken-script`](skills/bela-spoken-script/SKILL.md)、[`bela-ai-news-video`](skills/bela-ai-news-video/SKILL.md)、[`bela-text-motion-library`](skills/bela-text-motion-library/SKILL.md)、[`bela-jindutiao`](skills/bela-jindutiao/SKILL.md)、[`bela-broll`](skills/bela-broll/SKILL.md)、[`bela-ai-xhs-cover-director`](skills/bela-ai-xhs-cover-director/SKILL.md)、[`bela-ip-pic`](skills/bela-ip-pic/SKILL.md)、[`bela-motion-director`](skills/bela-motion-director/SKILL.md)、[`bela-hand-comic`](skills/bela-hand-comic/SKILL.md)、[`bela-videoframe-art`](skills/bela-videoframe-art/SKILL.md) |
+| [video-editing-workflow-bundle](https://github.com/belalee-ai/video-editing-workflow-bundle) | [`bela-video-editing`](skills/bela-video-editing/SKILL.md)、[`bela-spoken-script`](skills/bela-spoken-script/SKILL.md)、[`bela-ai-news-video`](https://github.com/belalee-ai/bela-skills/blob/0edc4c40474d8d384965b6ccd59a1b0560d52d1d/skills/bela-ai-news-video/SKILL.md)、[`bela-text-motion-library`](skills/bela-text-motion-library/SKILL.md)、[`bela-jindutiao`](skills/bela-jindutiao/SKILL.md)、[`bela-broll`](skills/bela-broll/SKILL.md)、[`bela-ai-xhs-cover-director`](skills/bela-ai-xhs-cover-director/SKILL.md)、[`bela-ip-pic`](skills/bela-ip-pic/SKILL.md)、[`bela-motion-director`](skills/bela-motion-director/SKILL.md)、[`bela-hand-comic`](skills/bela-hand-comic/SKILL.md)、[`bela-videoframe-art`](skills/bela-videoframe-art/SKILL.md) |
 | [bela-hand-comic](https://github.com/belalee-ai/bela-hand-comic) | [`bela-hand-comic`](skills/bela-hand-comic/SKILL.md) |
 | [bela-videoframe-art](https://github.com/belalee-ai/bela-videoframe-art) | [`bela-videoframe-art`](skills/bela-videoframe-art/SKILL.md) |
 | [bela-One-page-book](https://github.com/belalee-ai/bela-One-page-book) | [`bela-one-page-book`](skills/bela-one-page-book/SKILL.md) |
@@ -49,3 +49,5 @@ npx skills add belalee-ai/bela-skills --skill bela-channels-recut --skill bela-p
 - [Skill 体检 · bela-skill-hygiene](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-skill-hygiene)
 - [职位日报 · bela-daily-job-briefing](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-job-briefing)
 - [AI 日报 · bela-daily-briefing](https://github.com/belalee-ai/bela-skills/tree/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-briefing)
+
+2026-11-18，AI 新闻视频 Skill 从当前安装列表下架。[历史版本](https://github.com/belalee-ai/bela-skills/tree/0edc4c40474d8d384965b6ccd59a1b0560d52d1d/skills/bela-ai-news-video)可用于恢复。
