@@ -1,49 +1,47 @@
-# 保存到飞书「我的空间」
+# 归档到用户指定的飞书位置
 
-仅当用户选择飞书或两处（`feishu`、`both`），且本次要求上传的文件已在本地就绪时进入本分支。下载失败、等待用户播放或补交 MP4 时，返回当前素材状态即可。默认位置是当前飞书用户的 **我的空间 / 视频号爆款拆解 / {MMDD}-{博主}｜{标题}**。每条视频交付 MP4、口播稿 Markdown、带图的飞书在线拆解文档。取得并验证原封面时，多交付一张「视频号封面」。飞书目录和在线文档分别使用命名脚本的 `cloud_directory_title`、`cloud_document_title`，保留原标题中的标点。上传附件沿用本地文件名。
+用户选择飞书或两处保存时，运行 `python3 "$SKILL_DIR/scripts/user_config.py" destination`，按需传入本次方式（`--mode feishu` 或 `--mode both`）和 `--feishu-parent-url`。本次链接优先，未指定时读取已保存的 `delivery.feishu_parent_url`。只有 `status=destination_ready` 且返回的 `feishu_parent_url` 非空时才进入飞书分支。返回 `feishu_parent_url_required` 时提示「请粘贴要保存到的飞书文件夹或知识库节点链接。」返回 `invalid_feishu_parent_url` 时请用户更正链接。等待期间暂缓飞书归档；选择两处时可继续本地交付。
 
-## 本机交付偏好
+用户提供链接后先在本地校验格式并去掉查询串和片段。首次指定的常用目标或「以后用这里」记入个人配置；独立文档先按下文确认其父位置；「仅这次」只用于当前任务。清空父链接后，下次选择飞书时重新询问。账号或租户变化时先与用户核对是否沿用这个链接。分享口令、授权码、凭据和本次创建的作品目录均不作为常用目标。
 
-读取当前用户主目录下的 JSON 文件 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`。以当次明确指定的方式和位置为先，再取已记住的 `delivery.mode`、`delivery.local_root` 和 `delivery.feishu_parent_url`。首次 `mode` 为空时先问保存本地、飞书还是两处。选本地且根目录为空时用 `~/视频号爆款拆解/`。选飞书且父链接为空时用当前登录账号的「我的空间 / 视频号爆款拆解」。
-
-- 初次确定的常用位置、后续「以后用这里」的选择，按主流程写入用户配置，下次直接复用。用户说「仅这次」时只覆盖本次任务。若要求清除某项偏好，单独重置该字段：保存方式或飞书父链接恢复为 `null`，本地根目录恢复为 `~/视频号爆款拆解`。清除飞书父链接后，下一次飞书交付使用个人云盘默认目录。清除方式后，下一次未指定时重新询问。
-- 输入自定义位置时先在本地保存干净的资源链接。实际上传前，通过本机 CLI 核对其类型和当前用户的访问权限；若需解析普通文档所属的父位置，在该阶段按下文处理。分享签名、访问口令、临时链接、授权码、凭据和本次创建的作品目录链接均不写入这项偏好。选择个人云盘默认位置时保存 `null`，让它自然跟随当次登录账号。
-- 换号或切换租户时，重新核对身份和当前目标。对于已保存的自定义父链接，即使新账号也能访问，仍需确认是沿用该位置、改用新位置还是新账号的个人云盘。明确仅更换本次目标时保留旧偏好。先前账户的任务收据不用于新账号的续传。
+有具体目标链接，且本次需要上传的成品就绪后，才准备 CLI、核对远端位置和归档。下载失败或等待用户补交素材时只报告素材状态。每条作品直接归入目标下的 `{MMDD}-{博主}｜{标题}`，文件夹和在线文档分别使用命名脚本的 `cloud_directory_title`、`cloud_document_title`。上传附件沿用本地文件名。完整交付包括 MP4、口播稿 Markdown 和带图的在线拆解文档，取得并核验原封面时再附上封面。
 
 ## 准备当前用户的 CLI
 
 1. 运行 `lark-cli --version`。找不到命令时，在已选择飞书的前提下用 npm 安装官方包 `npm install -g @larksuite/cli`，再验证命令可用。使用 `lark-cli skills read lark-shared`、`lark-cli skills read lark-drive` 和 `lark-cli skills read lark-doc` 读取当前版本附带的说明，按需要读取其中列出的参考。无需把这些说明独立安装到用户的全局 Skills。
-2. 沿用本机已配置的 CLI、应用和当前用户凭据。先以 `--as user` 做归档本就需要的只读操作，例如按下文读取父 Wiki 节点、检查指定文件夹或列出个人云盘根目录；读取成功就继续。首次确实缺少应用配置时才按 CLI 提示绑定应用。
+2. 沿用本机已配置的 CLI、应用和当前用户凭据。先以 `--as user` 做归档本就需要的只读操作，按下文读取用户指定的 Wiki 节点或检查指定文件夹。读取成功就继续。首次确实缺少应用配置时才按 CLI 提示绑定应用。
 3. 读取失败时保留 CLI 的具体错误。对认证错误，运行 `lark-cli auth status --json --verify` 查看 `identities.user`；顶层默认身份可能是 bot。若已有此次尚有效的设备授权，用户完成浏览器确认后，用原 `device_code` 完成 `lark-cli auth login --device-code <本次设备码>`，再重试原操作。当前用户已有效时直接重试原读取即可。
 4. 只有 CLI 确认用户尚未登录或登录已失效且无法续期，才按本次交付所需范围发起一次设备登录。若已登录且业务命令明确报 `missing_scopes`，只申请返回的所缺权限（`lark-cli auth login --scope '<所缺权限>' --no-wait --json`）。链接和二维码按 `lark-shared` 展示。同一有效授权等待期间沿用原流程。网络、目录无访问权、容量和目标位置错误分别处理。设备码与登录凭据仅供当前认证使用。
 5. 下文的云端读写均显式使用 `--as user`。以退出码与 JSON 的 `ok` 核对结果；部分失败时保留本地文件和进度。
 
-## 解析或创建归档文件夹
+## 在指定位置创建作品目录
 
-默认先列个人云盘根目录的直接子项。根目录和子文件夹均按实际返回的 `data.has_more` 分页，将 `data.next_page_token` 作为下一页的 `page_token`。缺页或游标无效时，先解决读取问题再创建。
+按链接类型核对目标。创建、上传和回读均显式传入已经核实的非空父 token。链接无效、无权限或目标无法承载子项时，说明具体问题，请用户提供可写的目标链接或开通该位置的权限，保留本地成品与进度。不要调用省略父位置的创建命令，CLI 会将内容写到账号的默认位置。
+
+### 云盘文件夹链接
+
+用 `lark-cli drive +inspect --url '<用户给的文件夹 URL>' --as user` 核实资源为文件夹，取其标题与 token。只列该文件夹的直属子项。逐页检查 `data.has_more`，将 `data.next_page_token` 作为下一页的 `page_token`。缺页或游标无效时先解决读取问题，再判断是否新建。
 
 ```bash
-lark-cli drive files list --params '{"folder_token":"","page_size":200}' --as user --format json
-lark-cli drive files list --params '{"folder_token":"<父文件夹 token>","page_size":200}' --as user --format json
+lark-cli drive files list --params '{"folder_token":"<指定文件夹 token>","page_size":200}' --as user --format json
+lark-cli drive +create-folder --folder-token '<指定文件夹 token>' --name '<本条目录名>' --as user
 ```
 
-- 根目录已有唯一 `type=folder` 且 `name=视频号爆款拆解` 的条目就复用其 `token`。完全无同名项时执行 `lark-cli drive +create-folder --name '视频号爆款拆解' --as user`，保存返回的 `folder_token`。同名多项或同名非文件夹时请用户指定准确位置。
-- 用户指定了 Drive 父文件夹时，直接通过 `lark-cli drive +inspect --url '<文件夹 URL>' --as user` 核实类型、名称、token，使用该位置作为每条视频目录的父级。裸 token 配合 `--type folder`。用户提供的是路径时按层核对直接子项，遇到重名让用户选。读取指定位置失败时报告原始错误。
-- 在父文件夹中，同法查找本条视频目录。需要新建时执行 `lark-cli drive +create-folder --folder-token '<父文件夹 token>' --name '<本条目录名>' --as user`。保存目录 token 和返回的链接。批量处理共用一个父文件夹时，解析与创建目录串行执行。
+仅在已核实没有本条作品目录时执行创建命令。根据已有收据和源文件辨认同名项。记下作品目录的 token 与返回的链接，后续所有文件归入此目录。多条作品共用父级时，串行核对和创建目录。
 
-### 收到普通文档链接时
+### 知识库节点链接
 
-先识别链接表示的资源及用户指的归档位置。`drive +inspect` 返回该文档自身的类型、标题、token 和规范 URL。`drive.metas.batch_query` 的结果也只描述文档自身。普通 `/docx/…` 的 token 不能作为 Drive 文件夹 token。
+读取 `lark-cli skills read lark-wiki`。用 `lark-cli wiki +node-get --node-token '<用户给的 Wiki URL>' --as user` 取得 `space_id` 和 `node_token`。用 `lark-cli wiki +node-list --space-id '<空间 ID>' --parent-node-token '<指定节点 token>' --page-all --page-limit 0 --as user` 列全其直属子节点。确认需要新建时，执行 `lark-cli wiki +node-create --parent-node-token '<指定节点 token>' --title '<本条目录名>' --as user`。记录本条作品节点的 token。
 
-- 如果它实际属于知识库，已有相应权限时可以用 `lark-cli wiki +node-get --node-token '<docx URL>' --as user` 确认对象与 `space_id`、`node_token`。当用户想放在**该节点下**且节点可承载子项时，根据解析出的 Wiki 节点操作。如果用户说的是**与文档同层**，应核验其 `parent_node_token` 所指的节点。
-- 如果已有候选 Drive 文件夹（例如用户同时给了文件夹链接，或任务收据记录了明确的所在目录），分页列其直属子项，用 `type=docx` 和精确的文档 token 验证该条目的 `parent_token` 及文件夹身份。核实后可将文档**所在文件夹**作为指定父级并保存其规范链接。
-- 仅有普通文档链接且无法核实可用父位置时，请用户给出父文件夹链接或选择「我的空间 / 视频号爆款拆解」。得到选择后再写入。不以文档同名搜索结果猜位置，不扫描整个云盘，也不默默改投默认目录。若收到的是无法持久保存的分享链接，按同样方式取得可验证的标准位置。
+在知识库上传文件时，下文 `drive +upload` 示例的 `--folder-token` 换成 `--wiki-token '<本条节点 token>'`。创建报告时 `docs +create --parent-token` 传本条节点 token。回读时用相同的 `wiki +node-list` 命令列全本条节点的子项，通过 `obj_type` 与 `obj_token` 核对。
 
-### 明确指定已有知识库位置时
+### 文档链接
 
-如果用户明确给自己的 Wiki 父节点链接，读取 `lark-cli skills read lark-wiki`，仅为这一路径补必要 Wiki 权限。用 `lark-cli wiki +node-get --node-token '<Wiki URL>' --as user` 读取实际的 `space_id` 和 `node_token`。沿用经用户指定的旧配置（知识库名称和节点路径）时，用 `wiki +space-list` 精确找到知识库，沿路径用 `wiki +node-list` 列全各层直接子项。只有末级名称时遍历该空间，逐页以 `has_more` 为准，使用唯一命中。有歧义时请用户提供父节点链接。
+用 `drive +inspect --url '<文档 URL>' --as user` 核实文档类型与自身 token。普通文档 token 不能用作 Drive 文件夹 token。
 
-在该父节点下先列现有子节点，再用 `lark-cli wiki +node-create --parent-node-token '<父节点 token>' --title '<本条目录名>' --as user` 创建承载本视频资料的节点。下文文件上传的 `--folder-token` 改为 `--wiki-token <本条节点 token>`，创建报告的 `--parent-token` 传本条节点 token。核验目录时用 `lark-cli wiki +node-list --space-id '<空间 ID>' --parent-node-token '<本条节点 token>' --as user` 列全子节点，按 `obj_type` 与 `obj_token` 核对。
+- 文档属于知识库时，可用 `lark-cli wiki +node-get --node-token '<文档 URL>' --as user` 核实 `obj_token`、`node_token` 和 `space_id`。如果用户给这篇文档作为归档目标，按上一节在该节点下建作品目录。如果用户指定「和这篇文档同层」，用节点的 `parent_node_token` 核对父节点，并向用户确认目标名称和链接；用户已经明确给出该父节点链接时直接使用。
+- 独立云文档自身不能承载作品文件夹。若已有具体候选文件夹，列其直属子项，用文档的类型和精确 token 核实归属，并向用户说明其父文件夹的名称、链接。用户明确确认「存到此文件夹」后，才把它用作归档位置；保存为常用位置时记规范的父链接。
+- 普通文档的父位置无法核实，或用户只提供空间名称、标题或目录路径时，请用户粘贴可写文件夹或知识库节点的链接。等待期间保留成品；不通过全盘搜索同名项来确定目标。
 
 ## 写入视频、口播稿、封面与报告
 

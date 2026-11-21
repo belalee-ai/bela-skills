@@ -5,7 +5,7 @@
 - **红狐（推荐）`wechat-video-downloader`** 会把分享链接发给红狐解析，使用用户自己的红狐 API Key，受账号额度限制。[红狐使用说明](https://github.com/redfox-data/redfox-community/blob/main/skills/wechat-video-downloader/SKILL.md)
 - **乔木 `qiaomu-download`** 优先通过本机微信获取。需要使用乔木在线解析时，先征得用户对本次转交链接的同意。
 
-首次选定后保存为常用下载器。用户说「仅这次」时只覆盖本次。只安装、检查和更新选中的下载器。解析失败时报告该下载器返回的原因，等用户明确选择后才能改用另一家。用户只要成片时用下载模式。选择飞书可以先保存位置偏好，归档所需文件就绪后再按[飞书归档](lark-archive.md)读取目标。
+首次选定后保存为常用下载器。用户说「仅这次」时只覆盖本次。只安装、检查和更新选中的下载器。解析失败时报告该下载器返回的原因，等用户明确选择后才能改用另一家。用户只要成片时用下载模式。选择飞书或两处时，先取得用户提供的目标链接。已有常用链接可直接沿用。归档文件就绪后再按[飞书归档](lark-archive.md)读取该目标。
 
 ## 查现有安装
 
@@ -61,11 +61,16 @@ python3 "$SKILL_DIR/scripts/user_config.py" set --download-provider ask
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode local --local-root "$HOME/视频研究"
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode feishu --feishu-parent-url "$FEISHU_PARENT_URL"
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode both
+python3 "$SKILL_DIR/scripts/user_config.py" destination
+# 仅本次换到另一个飞书位置
+python3 "$SKILL_DIR/scripts/user_config.py" destination --mode both --feishu-parent-url "$FEISHU_PARENT_URL"
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode ask
 python3 "$SKILL_DIR/scripts/user_config.py" set --clear-local-root --clear-feishu-parent-url
 ```
 
-`init`、`show` 和 `set` 返回 `{ok,path,config}`。首次选择或明确更改常用下载器时用 `set --download-provider` 保存名称。「忘记下载器」用 `set --download-provider ask` 将其重置为 `null`。临时覆盖只向依赖检查传 `--download-provider` 并按本次选择下载。保存位置由 `config.delivery` 单独管理。`--mode ask` 让下次再问保存方式，保留已有根目录和父链接。清空本地根目录恢复建议位置，清空飞书父链接恢复「我的空间」默认目标。设置命令只合并给出的字段。提供的新飞书链接会先验证 HTTPS、官方域名与资源路径，查询串和片段会移除。认证仍由飞书 CLI 管理。
+`init`、`show` 和 `set` 返回 `{ok,path,config}`。首次选择或明确更改常用下载器时用 `set --download-provider` 保存名称。「忘记下载器」用 `set --download-provider ask` 将其重置为 `null`。临时覆盖只向依赖检查传 `--download-provider` 并按本次选择下载。保存位置由 `config.delivery` 单独管理。`--mode ask` 让下次再问保存方式，保留已有根目录和父链接。清空本地根目录恢复建议位置；清空飞书父链接后，下次选择飞书或两处时重新向用户要链接。设置命令只合并给出的字段。提供的新飞书链接会先验证 HTTPS、官方域名与资源路径，查询串和片段会移除。认证仍由飞书 CLI 管理。
+
+`destination` 仅读取偏好并校验本次输入。未选方式时返回 `delivery_mode_required`，选择飞书或两处但缺链接时返回 `feishu_parent_url_required`，当次传入的链接无效时返回 `invalid_feishu_parent_url`。三种情况都以 2 退出，提示用户补充对应信息。返回 `destination_ready` 只表示本次位置已选好，远端可访问性在成品就绪后用本机 CLI 核实。
 
 首次创建时从原 Skill 的 `config.local.json` 迁移已知工具路径、转录选择和公开来源记录。旧版明确配置的父 Wiki 链接可带入，旧样例的个人知识库名不会成为用户默认位置。原先相对于旧配置的 Skill 搜索目录会转换为绝对路径。后续只读个人配置。文件损坏时保留原文件并返回错误。需要临时指定工具配置时，向依赖检查脚本传 `--config "$CONFIG_FILE"`，该调用仅检查所给 v1/v2 文件。
 
@@ -74,7 +79,7 @@ python3 "$SKILL_DIR/scripts/user_config.py" set --clear-local-root --clear-feish
 | `download.provider` | 新配置或缺少此字段的旧配置按 `null` 处理，首次下载时先推荐红狐，等用户选择。可保存 `wechat-video-downloader`（红狐）或 `qiaomu-download`（乔木）。 |
 | `delivery.mode` | 首次为 `null`，询问本地、飞书或两处。已选的默认方式保存为 `local`、`feishu` 或 `both`。 |
 | `delivery.local_root` | 默认 `~/视频号爆款拆解`，接受绝对路径或 `~/` 开头的路径。 |
-| `delivery.feishu_parent_url` | 默认 `null`。可保存 Lark 或飞书的文件夹、文档或 Wiki 节点 HTTPS 链接。 |
+| `delivery.feishu_parent_url` | 默认 `null`，表示用户尚未指定位置。选择飞书或两处时必须有用户给出的链接。支持飞书或 Lark 的文件夹、Wiki 节点，以及可核实归档位置的文档 HTTPS 链接。 |
 | `transcription.mode` | 默认 `whisper-local`，另支持明确选择的 `hypit-transcribe`。 |
 | `transcription.language / threads` | 默认中文 `zh`、4 个 CPU 线程，按实际主语言和本机设置调整。 |
 | `transcription.model / model_path` | 默认多语言 `small`。按绝对路径、`WHISPER_MODEL_PATH`、命名模型缓存的顺序解析；默认缓存受 `XDG_CACHE_HOME` 支持。 |

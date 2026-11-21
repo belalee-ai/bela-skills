@@ -8,7 +8,7 @@
 npx skills add belalee-ai/bela-skills --skill bela-wechat-channel-video-download-and-analysis
 ```
 
-首次使用时选择本地、飞书或两处，之后可复用保存偏好。本地默认在 `~/视频号爆款拆解/` 按视频建目录，交付视频、口播稿和带图 Markdown 拆解报告。飞书默认在当前用户的「我的空间 / 视频号爆款拆解」按视频建目录，也可指定归档位置。迁移已有任务时，可以重新指定自己原先使用的飞书文件夹或知识库父节点链接。保存偏好记录在 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`。更换设备或账号后，先确认登录身份与父位置再归档。
+首次使用时选择本地、飞书或两处，之后可复用保存偏好。本地默认在 `~/视频号爆款拆解/` 按视频建目录，交付视频、口播稿和带图 Markdown 拆解报告。选择飞书或两处时，作品目录建在用户给出的飞书文件夹或知识库父节点下。旧配置中父链接为空时，下次飞书归档会先请你粘贴链接；已经指定过的位置可以继续沿用。保存偏好记录在 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`。更换设备或账号后，先确认登录身份与父位置再归档。
 
 旧配置没有 `download.provider` 时，下次下载会先推荐红狐，也可选乔木。确认后记住选择，之后直接沿用。上一版使用乔木的用户可继续选乔木。选红狐时，在本机为运行脚本的环境配置自己的 `REDFOX_API_KEY`。也可以说「仅这次用红狐」临时覆盖，或「忘记下载器」恢复下次询问。[下载器安装与配置](skills/bela-wechat-channel-video-download-and-analysis/references/setup-and-updates.md)
 

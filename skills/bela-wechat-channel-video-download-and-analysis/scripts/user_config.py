@@ -201,21 +201,28 @@ def write_atomic(path, data):
         temp_path.unlink(missing_ok=True)
 
 
+def load_settings(path):
+    if path.parent.is_symlink():
+        raise ValueError("个人配置目录需为真实目录")
+    if path.is_symlink():
+        raise ValueError("个人配置文件需为真实文件")
+    if path.exists():
+        if not stat.S_ISREG(path.stat().st_mode):
+            raise ValueError("个人配置路径需为普通文件")
+        original = read_json(path)
+        data = migrated_config(original, path) if original["schema_version"] == 1 else original.copy()
+        return original, data
+    old = legacy_path()
+    data = migrated_config(read_json(old), old) if old else read_json(SKILL_DIRECTORY / "config.example.json")
+    return None, data
+
+
 def preferences(changes=None, *, download_changes=None):
     path = config_path()
     with settings_lock(path.parent):
-        if path.is_symlink():
-            raise ValueError("个人配置文件需为真实文件")
-        if path.exists():
-            if not stat.S_ISREG(path.stat().st_mode):
-                raise ValueError("个人配置路径需为普通文件")
-            original = read_json(path)
-            data = migrated_config(original, path) if original["schema_version"] == 1 else original.copy()
+        original, data = load_settings(path)
+        if original is not None:
             path.chmod(0o600)
-        else:
-            original = None
-            old = legacy_path()
-            data = migrated_config(read_json(old), old) if old else read_json(SKILL_DIRECTORY / "config.example.json")
         delivery = clean_delivery(data.get("delivery", {}))
         delivery.update(changes or {})
         data["delivery"] = clean_delivery(delivery)
@@ -227,11 +234,35 @@ def preferences(changes=None, *, download_changes=None):
         return data
 
 
+def destination(mode_override, url_override):
+    _, data = load_settings(config_path())
+    delivery = clean_delivery(data.get("delivery", {}))
+    mode = mode_override or delivery["mode"]
+    result = {"ok": False, "mode": mode}
+    try:
+        url = delivery["feishu_parent_url"] if url_override is None else feishu_url(url_override)
+    except ValueError as error:
+        return {**result, "status": "invalid_feishu_parent_url", "next_action": str(error)}
+    if mode is None:
+        return {**result, "status": "delivery_mode_required", "next_action": "请选择保存到本地、飞书或两处。"}
+    if mode in ("local", "both"):
+        result["local_root"] = delivery["local_root"]
+    if mode in ("feishu", "both"):
+        result["feishu_parent_url"] = url
+        if url is None:
+            return {**result, "status": "feishu_parent_url_required",
+                    "next_action": "请粘贴要保存到的飞书文件夹、知识库节点或文档链接。"}
+    return {**result, "ok": True, "status": "destination_ready"}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("init")
     commands.add_parser("show")
+    route = commands.add_parser("destination", help="只读解析本次交付方式和目标位置")
+    route.add_argument("--mode", choices=MODES, help="仅本次使用的交付方式")
+    route.add_argument("--feishu-parent-url", help="仅本次使用的飞书目标链接")
     update = commands.add_parser("set")
     update.add_argument("--mode", choices=(*MODES, "ask"))
     update.add_argument("--download-provider", choices=(*DOWNLOAD_PROVIDERS, "ask"),
@@ -257,6 +288,10 @@ def main():
         if not changes and not download_changes:
             parser.error("set 至少须指定一项偏好")
     try:
+        if args.command == "destination":
+            result = destination(args.mode, args.feishu_parent_url)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0 if result["ok"] else 2
         data = preferences(changes, download_changes=download_changes)
     except (ValueError, OSError) as error:
         print(json.dumps({"ok": False, "path": str(config_path()), "error": str(error)}, ensure_ascii=False))
