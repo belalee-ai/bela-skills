@@ -388,6 +388,8 @@ npx skills add belalee-ai/bela-skills --skill bela-broll --skill bela-video-edit
 
 ### 同事如何使用维护工具
 
+准备新增 Skill 时，先用 `find-skills` 比较同类方案。能直接用就推荐原版。需要新建时，请 Bela 选定社区基座或确认从零创建，再用仓库内 Anthropic 的 `skill-creator` 编写。每次新建或修改 Skill 后都必须用仓库内的 `darwin-skill` 验收。见[创建前的检索与比较](AGENTS.md#创建-skill-前先检索与比较)和[编写与验收](AGENTS.md#编写与验收)。
+
 克隆本仓库（已有副本先执行 `git pull --ff-only`），在仓库根目录打开 Codex 或 Claude Code，即可按名称调用以下三个项目级 Skill。例如，在新对话里输入「用 skill-creator 帮我检查这次改动的 Skill 描述」。
 
 | 维护任务 | 项目内的 Skill |
