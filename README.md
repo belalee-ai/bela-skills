@@ -386,8 +386,25 @@ npx skills add belalee-ai/bela-skills --skill bela-broll --skill bela-video-edit
 
 ## 项目结构与维护
 
+### 同事如何使用维护工具
+
+克隆本仓库（已有副本先执行 `git pull --ff-only`），在仓库根目录打开 Codex 或 Claude Code，即可按名称调用以下三个项目级 Skill。例如，在新对话里输入「用 skill-creator 帮我检查这次改动的 Skill 描述」。
+
+| 维护任务 | 项目内的 Skill |
+| --- | --- |
+| 查找已有的 Skill 和安装来源 | [find-skills](.agents/skills/find-skills/SKILL.md) |
+| 编写或修改 Skill、设计评测样例 | [skill-creator](.agents/skills/skill-creator/SKILL.md) |
+| 比较 Skill 修改前后的表现 | [darwin-skill](.agents/skills/darwin-skill/SKILL.md) |
+
+三个工具的文件保存在 `.agents/skills/`，Claude Code 通过 `.claude/skills/` 的相对符号链接读取同一份文件。上游来源和版本见 [skills-lock.json](skills-lock.json)。[find-skills 的 MIT 许可](.agents/licenses/find-skills-LICENSE) 随仓库保存，另外两个工具的许可证在各自目录内。
+
+### 目录说明
+
 ```text
 bela-skills/
+├── .agents/skills/          # 项目维护用的第三方 Skill
+├── .claude/skills/          # 指向 .agents/skills/ 的相对链接
+├── skills-lock.json         # 维护工具的上游仓库、提交与内容校验值
 ├── skills/
 │   └── bela-<name>/
 │       ├── SKILL.md

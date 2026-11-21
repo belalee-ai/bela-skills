@@ -4,7 +4,8 @@
 
 ## 目录与命名
 
-- 每个 Skill 放在 `skills/<name>/SKILL.md`，目录名与 YAML `name` 完全一致，统一使用 `bela-` 前缀和小写连字符。
+- 合集对外分发的 Skill 放在 `skills/<name>/SKILL.md`，目录名与 YAML `name` 完全一致，统一使用 `bela-` 前缀和小写连字符。
+- 项目维护用的第三方 Skill 保留上游名称。更新时一并核对 `.agents/skills/` 的文件、`.claude/skills/` 的相对链接、`skills-lock.json` 的版本和随附许可证。
 - 根目录不添加 `SKILL.md`，避免合集被识别成单个 Skill。
 - `description` 简明说明用途与触发场景；修改名称、能力范围或默认行为前，先判断是否超出本次授权。
 - 脚本、参考资料、模板和运行所需资源随对应 Skill 保存，使用相对路径。保留既有功能与资源，不能因整理目录而省略。
