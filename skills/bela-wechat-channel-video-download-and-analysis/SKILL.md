@@ -2,14 +2,16 @@
 name: bela-wechat-channel-video-download-and-analysis
 description: 下载微信视频号作品，用本地 Whisper 校对口播，用 Hypit 按时间轴做带图拆解，交付 MP4、口播稿、拆解报告和可取得的作品封面。用户只贴 weixin.qq.com/sph/ 链接、要求只下载该视频号到本地、要带图拆解或明确点名时使用。可选本地文件或飞书链接。
 metadata:
-  version: "2.1.1"
+  version: "2.2.0"
 ---
 
 # 贝拉 · 视频号下载与拆解
 
 ## 收到请求
 
-启动时先运行 `python3 "$SKILL_DIR/scripts/user_config.py" show`，创建或读取用户主目录下的 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`（UTF-8 JSON）。仅查看或修改偏好时直接使用 `show` 或 `set` 并回读指定字段，无需作品链接。开始下载和拆解时按以下顺序执行。
+以下命令中的 `SKILL_DIR` 是当前 Agent 加载的这份 `SKILL.md` 所在目录，不依赖启动时的工作目录。把临时文件放在本次任务可写的工作区。
+
+启动时运行 `python3 "$SKILL_DIR/scripts/user_config.py" show`。默认偏好保存在 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`。云端可把持久卷挂载或链接到这个配置目录。环境只读时，沿用可读的偏好或用户当次的选择继续工作，并说明新的选择仅对本次有效。仅查看或修改偏好时使用 `show` 或 `set`，无需作品链接。
 
 1. 接受一条 `https://weixin.qq.com/sph/作品ID`，包括分享文字中的链接。明确调用但缺链接时只提示「请粘贴微信视频号分享链接。」拿到链接后再准备工具。同一请求给多条作品链接时，每条单独处理、建目录和报告进度。
 2. 有效链接到手后，分别读取下载器 `download.provider` 和交付位置 `delivery.mode`。当次指定优先，其次用已保存的值。只问仍缺的选择；两项都缺就一起问。
@@ -21,11 +23,11 @@ metadata:
 
 ## 下载与确认作品资料
 
-按[安装和检查依赖](references/setup-and-updates.md)准备所选下载器，再按[定向更新](references/skill-updates.md)核对它的来源。只走本次选定的一条路线。失败时说明实际原因并保留工作区；用户选用另一家后才切换。
+按[安装和检查依赖](references/setup-and-updates.md)定位本次所需的工具。能完成当前步骤就直接运行；缺少入口时补装，已装版本实际不兼容或用户要求升级时再做[定向更新](references/skill-updates.md)。只走本次选定的一条路线。失败时说明实际原因并保留工作区；用户选用另一家后才切换。
 
 ### 红狐 · wechat-video-downloader
 
-首次缺少上游 Skill 时用 `npx skills add https://github.com/redfox-data/redfox-community --skill wechat-video-downloader` 安装。从依赖检查取红狐目录和可导入 `requests` 的 Python，按[红狐下载](references/redfox-download.md)运行适配器。它使用用户本机的 `REDFOX_API_KEY` 向红狐解析当前链接，再把视频及可取得的封面下载到本条作品的工作目录。仅把下载器名称写入偏好。缺少密钥时请用户在本机设置后重试；遇到额度或服务错误时报告原因。红狐返回标题或描述，博主仍需核实。
+首次缺少上游 Skill 时用 `npx skills add https://github.com/redfox-data/redfox-community --skill wechat-video-downloader` 安装。从依赖检查取红狐目录和可导入 `requests` 的 Python，按[红狐下载](references/redfox-download.md)运行适配器。它使用用户本机的 `REDFOX_API_KEY` 向红狐解析当前链接，再把视频及可取得的封面下载到本条作品的工作目录。仅把下载器名称写入偏好。缺少密钥时请用户在本机设置后重试；遇到额度或服务错误时报告原因。若红狐已返回直链但下载卡在云电脑的网络检查，按返回状态报告下载阶段；沿用已选的红狐，避免重复解析扣费或直接让用户改传 MP4。红狐返回标题或描述，博主仍需核实。
 
 ### 乔木 · qiaomu-download
 

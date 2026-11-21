@@ -3,7 +3,6 @@
 import argparse
 import importlib
 import json
-import os
 from pathlib import Path
 import re
 import subprocess
@@ -11,6 +10,8 @@ import sys
 import tempfile
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+from media_files import publish_file
 
 MAX_IMAGE_BYTES = 24 * 1024 * 1024
 IMAGE_FORMATS = {"mjpeg": "jpg", "png": "png", "webp": "webp"}
@@ -40,7 +41,8 @@ class ImageRedirect(HTTPRedirectHandler):
 
 def save_cover(url, folder, *, opener=None):
     folder.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(dir=folder) as stage:
+    with tempfile.TemporaryDirectory(dir=folder) as staging_dir:
+        stage = Path(staging_dir) / "cover"
         request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         if opener is None:
             opener = build_opener(ImageRedirect())
@@ -52,20 +54,19 @@ def save_cover(url, folder, *, opener=None):
                        or (data.startswith(b"RIFF") and data[8:12] == b"WEBP"))
         if not known_image:
             raise ValueError("unsupported image header")
-        stage.write(data)
-        stage.flush()
+        stage.write_bytes(data)
         probe = subprocess.run(["ffprobe", "-v", "error", "-protocol_whitelist", "file,pipe", "-select_streams", "v:0",
                                 "-show_entries", "stream=codec_name,width,height", "-of", "json",
-                                stage.name], check=True, capture_output=True, timeout=12)
+                                str(stage)], check=True, capture_output=True, timeout=12)
         stream = json.loads(probe.stdout)["streams"][0]
         ext = IMAGE_FORMATS.get(stream["codec_name"])
         if not ext or min(stream["width"], stream["height"]) <= 1:
             raise ValueError("unusable cover format or dimensions")
-        subprocess.run(["ffmpeg", "-v", "error", "-protocol_whitelist", "file,pipe", "-xerror", "-i", stage.name, "-frames:v", "1",
+        subprocess.run(["ffmpeg", "-v", "error", "-protocol_whitelist", "file,pipe", "-xerror", "-i", str(stage), "-frames:v", "1",
                         "-f", "null", "-"], check=True, capture_output=True, timeout=20)
         dest = folder / ("publication-cover." + ext)
         try:
-            os.link(stage.name, dest)
+            publish_file(stage, dest)
         except FileExistsError:
             if dest.read_bytes() != data:
                 raise ValueError("a different original already exists")

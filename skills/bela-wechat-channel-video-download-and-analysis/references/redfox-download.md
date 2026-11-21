@@ -14,10 +14,10 @@ npx skills add https://github.com/redfox-data/redfox-community --skill wechat-vi
 
 ## 下载与核验
 
-用依赖检查通过的 Python 执行。此处的 `SOURCE_DIR` 是单条作品的工作目录，临时直链在适配器进程内使用。
+用预检返回的 `tool:python3.path` 作为 `PYTHON` 执行，以便复用当前环境中的 `requests`。此处的 `SOURCE_DIR` 是单条作品的工作目录，临时直链在适配器进程内使用。
 
 ```sh
-python3 "$SKILL_DIR/scripts/redfox_download.py" \
+"$PYTHON" "$SKILL_DIR/scripts/redfox_download.py" \
   --url "$SHARE_URL" --redfox-dir "$REDFOX_DIR" --source-dir "$SOURCE_DIR"
 ```
 
@@ -25,7 +25,13 @@ python3 "$SKILL_DIR/scripts/redfox_download.py" \
 
 - 成功时退出码为零且 `ok: true`。读取 `video_path`、`video_sha256` 和 `probe`。适配器对临时文件运行 FFprobe 解码计帧，核实时长、视频流和画面尺寸，记录帧率及音轨编码，再将已验证的原片保存为 `redfox-source.mp4`。按主文的命名脚本生成交付文件名。
 - `title` 是标题或描述的首个非空行，`description_or_title` 保留上游返回的文字。红狐脚本没有博主署名字段，`author` 留空。若归档所需署名或标题仍缺，按主文核实。
-- `cover_path` 是同一条解析结果的 `cover` 字段所指的本地候选图。适配器仅接受公网 HTTPS 图片和跳转，检查图像编码、尺寸和可解码性。目检核实确属作品发布封面后，按[媒体归档规范](media.md)纳入交付。缺图、读取失败或归属不明时继续用已验证的视频。
+- `cover_path` 是同一条解析结果的 `cover` 字段所指的本地候选图。图片和每次跳转共用视频的 HTTPS 地址检查。适配器核对图像编码、尺寸和可解码性。目检核实确属作品发布封面后，按[媒体归档规范](media.md)纳入交付。缺图、读取失败或归属不明时继续用已验证的视频。
+
+## 云电脑和代理网络
+
+下载器使用红狐返回的 HTTPS 链接，沿云电脑已有的网络获取媒体。普通 DNS、系统配置的 HTTPS 代理和使用 `198.18.0.0/15` 合成地址的代理共用同一入口。临时 CDN 域名无需预先登记。请求和重定向保留域名及证书验证；本机、私网和直接指向合成 IP 的链接会被拒绝。[代理 DNS 示例](https://wiki.metacubex.one/en/config/dns/#fake-ip-range)
+
+红狐解析成功而媒体请求失败时，说明卡在哪一步，保留已选下载器和已有素材。网络条件没有变化时无需反复付费解析。不要索取完整签名地址或 API Key。
 
 ## 失败时按阶段处理
 
@@ -35,7 +41,9 @@ python3 "$SKILL_DIR/scripts/redfox_download.py" \
 | `missing_api_key`、`authentication_failed` | 请用户在自己的环境配置或更新红狐凭据，或按主文另选下载方式。 |
 | `insufficient_credit` | 说明本次解析因积分或额度不足停止，由用户决定是否调整账号额度或更换路线。 |
 | `rate_limited`、`resolver_network_error`、`resolver_failed`、`invalid_resolver_response` | 记录解析阶段的类别。检查本条分享链接及服务状态，再按本次授权决定是否重试。 |
+| `media_dns_error` | 当前网络无法解析媒体域名。告知用户下载发生在红狐返回地址之后，按当前云环境的网络状态处理。 |
+| `media_network_error`、`media_tls_error` | 红狐已返回媒体地址，但当前运行环境无法连接或验证 HTTPS。报告网络或证书阶段，保留用户选定的下载方式。 |
 | `media_http_error`、`incomplete_download`、`invalid_media_url`、`invalid_mp4`、`download_failed` | 临时地址可能过期，服务也可能返回错误页或无法解码的素材。报告下载或验证失败，需要重新解析时说明可能再次消耗积分。 |
-| `destination_exists` | 核对原收据及哈希，或使用新工作目录。已有文件保留。 |
+| `destination_exists` | 核对原收据及哈希，或使用新工作目录。已有文件保留。若不支持硬链接的挂载在发布时被强制中断，可从现有工作文件恢复到新的单条作品工作目录。 |
 
 只有通过本地视频验证才进入拆解。收据保存适配器返回的分享链接与本地信息，省略上游原始响应、临时下载地址和密钥。

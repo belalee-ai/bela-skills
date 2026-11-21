@@ -362,7 +362,7 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 | `bela-draw-your-font` | 需要 Node.js ≥ 18，首次运行可能需要通过 npm 安装 CLI，字体在本地生成。改编自 [Danilo Znamerovszkij 的 draw-your-font](https://github.com/danilo-znamerovszkij/draw-your-font)，保留 MIT 许可。 |
 | 漫画、封面、IP、视频帧艺术化等视觉任务 | 需要对应的图片生成或编辑能力；安装 Skill 本身不会提供生成服务。 |
 
-视频号下载与拆解会在本机 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config` 记住下载器、保存方式、本地根目录和飞书父位置。可以说「这次用红狐」临时切换，或说「以后都用乔木」「忘记下载器」更改偏好。保存位置可单独指定，例如「这次只存本地」「以后都存这个飞书文件夹」或「忘记保存方式」。选择飞书或两处时，首次会请你粘贴目标文件夹或知识库节点链接，之后直接复用。选择本地时无需飞书账号。
+视频号下载与拆解会在本机 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config` 记住下载器、保存方式、本地根目录和飞书父位置。可以说「这次用红狐」临时切换，或说「以后都用乔木」「忘记下载器」更改偏好。保存位置可单独指定，例如「这次只存本地」「以后都存这个飞书文件夹」或「忘记保存方式」。选择飞书或两处时，首次会请你粘贴目标文件夹或知识库节点链接，之后直接复用。选择本地时无需飞书账号。 在云电脑中也可以复用已有的下载器、Python 环境和网络代理。若云电脑重启后会清空主目录，可把持久卷挂载到 `~/.bela-skills-config/` 以保留偏好。
 
 例如，安装 B-roll 配画及其配套流程：
 

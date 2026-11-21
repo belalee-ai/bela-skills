@@ -1,6 +1,6 @@
 # 按名称核对和更新依赖 Skill
 
-下载只核对当次选用的 `qiaomu-download` 或 `wechat-video-downloader`。下载器尚未选定时先询问。完整拆解另核对 `hypit`。沿用现有来源和安装范围，首次缺少时按[首次准备](setup-and-updates.md)的官方来源补装。
+本地入口已能执行时直接处理本次作品。首次缺少所选依赖时，按[首次准备](setup-and-updates.md)补装；实跑遇到版本不兼容或用户要求核对、更新时再执行以下步骤。下载只涉及选定的 `qiaomu-download` 或 `wechat-video-downloader`，完整拆解另用 `hypit`。沿用已核实的来源和安装范围。
 
 1. 从所选安装记录和真实目录核对名称、项目或用户范围、来源、子路径及分支或固定版本。skills CLI 通常把项目记录放在 `skills-lock.json`，用户记录放在 `~/.agents/.skill-lock.json`。只取目标条目的必要字段。
 2. 找到上游中对应的 Skill 目录。乔木在仓库根，红狐在 `skills/wechat-video-downloader/`，Hypit 在 `skills/hypit/`。如有上次安装的 commit，比较旧提交和追踪 ref 中该目录各自的 Git tree SHA。只有安装器内容哈希时，按安装器相同算法比较文件。保留固定 tag 或 commit，本地有定制时先保存差异。[红狐官方目录](https://github.com/redfox-data/redfox-community/tree/main/skills/wechat-video-downloader)

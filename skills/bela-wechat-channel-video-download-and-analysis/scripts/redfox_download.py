@@ -12,15 +12,21 @@ from pathlib import Path
 import re
 import shutil
 import socket
+import ssl
 import subprocess
 import sys
 import tempfile
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
-from urllib.request import HTTPRedirectHandler, Request, build_opener
+from urllib.request import HTTPRedirectHandler, Request, build_opener, getproxies, proxy_bypass
 
 from archive_names import URL_PATTERN
+from media_files import publish_file
 from online_metadata import save_cover
+
+
+PROXY_FAKE_IPV4 = ipaddress.IPv4Network("198.18.0.0/15")
+LOCAL_DNS_SUFFIXES = (".localhost", ".local", ".internal", ".localdomain", ".lan", ".home.arpa")
 
 
 class DownloadError(Exception):
@@ -28,15 +34,48 @@ class DownloadError(Exception):
 
 
 def require_public_https(value):
-    if not isinstance(value, str) or any(ord(c) < 32 for c in value):
+    """Check a RedFox media link while leaving HTTPS and routing to the host."""
+    if not isinstance(value, str) or any(c.isspace() or ord(c) < 32 for c in value):
         raise DownloadError("invalid_media_url")
-    url = urlsplit(value)
-    if (url.scheme != "https" or not url.hostname or url.username is not None
-            or url.password is not None or url.port not in (None, 443)):
+    try:
+        url = urlsplit(value)
+        host, port = url.hostname, url.port
+    except ValueError:
+        raise DownloadError("invalid_media_url") from None
+    if (url.scheme != "https" or not host or url.username is not None
+            or url.password is not None or port not in (None, 443)):
         raise DownloadError("invalid_media_url")
-    addresses = socket.getaddrinfo(url.hostname, 443, type=socket.SOCK_STREAM)
-    if not addresses or any(not ipaddress.ip_address(a[4][0]).is_global for a in addresses):
-        raise DownloadError("invalid_media_url")
+
+    host = host.rstrip(".")
+    try:
+        literal = ipaddress.ip_address(host)
+    except ValueError:
+        literal = None
+    if literal is not None:
+        addresses = [literal]
+    else:
+        if ("." not in host or host == "home.arpa" or host.endswith(LOCAL_DNS_SUFFIXES)
+                or not re.fullmatch(r"(?:[a-z0-9-]+\.)+[a-z][a-z0-9-]*", host)):
+            raise DownloadError("invalid_media_url")
+        try:
+            records = socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
+        except socket.gaierror:
+            # A configured HTTPS proxy can resolve the hostname on its own.
+            if getproxies().get("https") and not proxy_bypass(url.netloc):
+                return
+            raise DownloadError("media_dns_error") from None
+        addresses = [ipaddress.ip_address(record[4][0]) for record in records]
+        if not addresses:
+            raise DownloadError("media_dns_error")
+
+    for address in addresses:
+        if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped is not None:
+            address = address.ipv4_mapped
+        # Fake-IP is a routing placeholder for a named TLS origin, never a URL target.
+        if literal is None and address in PROXY_FAKE_IPV4:
+            continue
+        if not address.is_global or address.is_multicast:
+            raise DownloadError("invalid_media_url")
 
 
 class MediaRedirect(HTTPRedirectHandler):
@@ -95,13 +134,10 @@ def fetch_video(url, target):
 
 
 def verify_video(path):
-    with path.open("rb") as media:
-        if media.read(8)[4:8] != b"ftyp":
-            raise DownloadError("invalid_mp4")
     proc = subprocess.run([
         "ffprobe", "-v", "error", "-protocol_whitelist", "file", "-f", "mov", "-count_frames",
         "-show_entries", "format=duration:format_tags=major_brand:"
-        "stream=index,codec_name,codec_type,width,height,avg_frame_rate,nb_read_frames,nb_frames:"
+        "stream=index,codec_name,codec_type,width,height,avg_frame_rate,nb_read_frames:"
         "stream_disposition=attached_pic", "-of", "json", str(path),
     ], capture_output=True)
     if proc.returncode or proc.stderr.strip():
@@ -115,10 +151,9 @@ def verify_video(path):
     video = next((s for s in streams if s.get("codec_type") == "video"
                   and not s.get("disposition", {}).get("attached_pic")), {})
     duration = float(fmt.get("duration") or 0)
-    frames = int(video.get("nb_read_frames") or 0)
-    if (not math.isfinite(duration) or duration <= 0 or frames < 1
-            or min(video.get("width", 0), video.get("height", 0)) < 1
-            or (video.get("nb_frames", "").isdigit() and frames != int(video["nb_frames"]))):
+    frames = str(video.get("nb_read_frames", ""))
+    if (not math.isfinite(duration) or duration <= 0 or not frames.isdigit() or int(frames) < 1
+            or min(video.get("width", 0), video.get("height", 0)) < 1):
         raise DownloadError("invalid_mp4")
     return {"duration_seconds": duration, "width": video["width"], "height": video["height"],
             "frame_rate": video.get("avg_frame_rate"), "video_codec": video["codec_name"],
@@ -139,7 +174,7 @@ def download(url, redfox_dir, source_dir):
         staged = Path(stage) / "video.mp4"
         digest = fetch_video(row.get("videoUrl"), staged)
         info = verify_video(staged)
-        os.link(staged, destination)
+        publish_file(staged, destination)
         raw_text = row.get("title") if isinstance(row.get("title"), str) else ""
         lines = raw_text.splitlines()
         private_values = (row.get("videoUrl"), row.get("cover"), os.environ.get("REDFOX_API_KEY"))
@@ -161,7 +196,7 @@ def download(url, redfox_dir, source_dir):
                 require_public_https(row["cover"])
                 cover = Path(save_cover(row["cover"], Path(stage), opener=build_opener(MediaRedirect())))
                 path = source_dir / cover.name
-                os.link(cover, path)
+                publish_file(cover, path)
                 result["cover_path"] = str(path.resolve())
             except (DownloadError, HTTPException, OSError, ValueError, subprocess.SubprocessError, LookupError):
                 result["cover_status"] = "unavailable"
@@ -182,6 +217,9 @@ def main():
         result = {"ok": False, "status": "destination_exists"}
     except HTTPError as exc:
         result = {"ok": False, "status": "media_http_error", "http_status": exc.code}
+    except URLError as exc:
+        status = "media_tls_error" if isinstance(exc.reason, ssl.SSLError) else "media_network_error"
+        result = {"ok": False, "status": status}
     except (HTTPException, OSError, ValueError, subprocess.SubprocessError) as exc:
         result = {"ok": False, "status": "download_failed", "error_type": type(exc).__name__}
     print(json.dumps(result, ensure_ascii=False))

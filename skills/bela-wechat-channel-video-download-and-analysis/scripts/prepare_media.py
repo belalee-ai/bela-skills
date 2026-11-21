@@ -15,6 +15,8 @@ import tempfile
 import zlib
 from pathlib import Path
 
+from media_files import publish_file
+
 
 class KeepOriginal(Exception):
     """A candidate is unsupported, larger or insufficiently faithful."""
@@ -255,7 +257,7 @@ def prepare(kind, src, dst):
                 after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns):
             raise ValueError("source changed during preparation; retry with a complete download")
         # Both paths are on one filesystem; link publishes the complete file only if dst is still free.
-        os.link(candidate, dst)
+        publish_file(candidate, dst)
     return {"ok": True, "status": status, "output": str(dst), "source_bytes": source_size,
             "output_bytes": dst.stat().st_size, **checks}
 

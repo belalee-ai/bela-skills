@@ -16,22 +16,12 @@ import user_config
 
 SKILL_DIRECTORY = Path(__file__).resolve().parent.parent
 CORE_FILES = {
-    "qiaomu-download": (
-        "scripts/download.py", "scripts/wechat_adapter.py", "references/wechat-video.md",
-        "scripts/wechat/download_media.py", "scripts/wechat/preflight.py",
-        "scripts/wechat/download_online.py", "scripts/wechat/release-lock.json",
-    ),
-    "wechat-video-downloader": ("scripts/parse_video_download.py", "references/core_workflow.md"),
-    "hypit": (
-        "references/creation/reference-video.md", "references/creation/project-files.md",
-        "references/environment/distribution.md", "references/environment/local-tools.md",
-        "references/environment/model-and-provider.md",
-    ),
+    "qiaomu-download": ("scripts/download.py", "references/wechat-video.md"),
+    "wechat-video-downloader": ("scripts/parse_video_download.py",),
+    "hypit": ("references/creation/reference-video.md",),
 }
 COMMANDS = {
-    "python3": ["--version"], "node": ["--version"], "npm": ["--version"],
-    "npx": ["--version"], "hypit": ["version"],
-    "ffmpeg": ["-version"], "ffprobe": ["-version"],
+    "hypit": ["media", "--help"], "ffmpeg": ["-version"], "ffprobe": ["-version"],
 }
 WHISPER_REQUIRED_FLAGS = (
     "--model", "--word_timestamps", "--language", "--device", "--fp16",
@@ -120,7 +110,7 @@ def run_local(argv, timeout):
     return True, output, None
 
 
-def resolve_tool(name, override=None):
+def resolve_tool(name, override=None, workspace_dirs=()):
     if override is not None:
         if not isinstance(override, str):
             return None, "配置必须是绝对启动器路径或 null"
@@ -131,9 +121,10 @@ def resolve_tool(name, override=None):
             return None, "配置的启动器不存在、为空、不可读或不可执行"
         return str(path), None
     if name == "hypit":
-        project_cli = Path.cwd() / "node_modules" / ".bin" / ("hypit.cmd" if os.name == "nt" else "hypit")
-        if project_cli.is_file() and os.access(project_cli, os.X_OK):
-            return str(project_cli), None
+        for directory in workspace_dirs:
+            project_cli = directory / "node_modules" / ".bin" / ("hypit.cmd" if os.name == "nt" else "hypit")
+            if project_cli.is_file() and os.access(project_cli, os.X_OK):
+                return str(project_cli), None
     path = shutil.which(name)
     if path:
         return path, None
@@ -165,12 +156,30 @@ def resolve_whisper_model(transcription):
     return None, "Whisper 缓存中没有已下载的模型文件：" + str(candidate)
 
 
-def standard_skill_roots():
+def project_directories(workspace):
+    if workspace:
+        return [Path(workspace).expanduser().resolve()]
+    cwd = Path.cwd()
+    directories = []
+    for directory in (cwd, *cwd.parents):
+        directories.append(directory)
+        if (directory / ".git").exists():
+            return directories
+    return [cwd]
+
+
+def standard_skill_roots(workspace_dirs):
     home = Path.home()
     codex_home = Path(os.environ.get("CODEX_HOME") or home / ".codex").expanduser()
+    claude_home = Path(os.environ.get("CLAUDE_CONFIG_DIR") or home / ".claude").expanduser()
+    grok_home = Path(os.environ.get("GROK_HOME") or home / ".grok").expanduser()
+    roots = [directory / agent / "skills" for directory in workspace_dirs
+             for agent in (".agents", ".claude", ".gemini", ".grok")]
+    # A symlinked Skill can have siblings in its installation or its source checkout.
+    install_parent = Path(__file__).absolute().parent.parent.parent
     return [
-        SKILL_DIRECTORY.parent, Path.cwd() / ".agents" / "skills", Path.cwd() / ".claude" / "skills",
-        home / ".agents" / "skills", codex_home / "skills", home / ".claude" / "skills",
+        *roots, install_parent, SKILL_DIRECTORY.parent, home / ".agents/skills",
+        codex_home / "skills", claude_home / "skills", home / ".gemini/skills", grok_home / "skills",
     ]
 
 
@@ -184,9 +193,9 @@ def check_transcription(config, settings, timeout, record):
     threads = transcription.get("threads")
     record("transcription.language", isinstance(language, str) and bool(language.strip()),
            "必须明确 transcription.language，例如 zh")
-    record("transcription.threads", isinstance(threads, int) and not isinstance(threads, bool) and threads > 0,
-           "transcription.threads 必须是正整数")
     if mode == "whisper-local":
+        record("transcription.threads", type(threads) is int and threads > 0,
+               "transcription.threads 必须是正整数")
         launcher, reason = resolve_tool("whisper", settings.get("whisper"))
         if launcher:
             passed, output, reason = run_local([launcher, "--help"], timeout)
@@ -213,7 +222,8 @@ def check_transcription(config, settings, timeout, record):
         record("transcription.mode", False, "mode 必须为 whisper-local 或 hypit-transcribe")
 
 
-def check(config_path=None, timeout=30, download_only=False, download_provider=None):
+def check(config_path=None, timeout=30, download_only=False, download_provider=None,
+          workspace=None, skill_roots=()):
     checks = []
     missing = []
 
@@ -229,7 +239,7 @@ def check(config_path=None, timeout=30, download_only=False, download_provider=N
             if config["schema_version"] == 2:
                 user_config.clean_delivery(config.get("delivery"))
         else:
-            config = user_config.preferences()
+            config = user_config.read_preferences()
         saved_provider = user_config.clean_download(config.get("download", {}))["provider"]
         provider = saved_provider if download_provider is None else download_provider
         if provider is not None and provider not in user_config.DOWNLOAD_PROVIDERS:
@@ -253,11 +263,12 @@ def check(config_path=None, timeout=30, download_only=False, download_provider=N
     if not isinstance(configured_roots, list) or any(not isinstance(x, str) or not x.strip() for x in configured_roots):
         record("config.skill_roots", False, "skill_roots 必须是路径字符串数组")
         configured_roots = []
-    roots = []
+    roots = [Path(value).expanduser() for value in skill_roots]
     for value in configured_roots:
         candidate = Path(value).expanduser()
         roots.append(candidate if candidate.is_absolute() else selected.parent / candidate)
-    roots.extend(standard_skill_roots())
+    workspace_dirs = project_directories(workspace)
+    roots.extend(standard_skill_roots(workspace_dirs))
     roots = list(dict.fromkeys(path.resolve() for path in roots))
     required_skills = [provider] if download_only else [provider, "hypit"]
     for name in required_skills:
@@ -282,45 +293,27 @@ def check(config_path=None, timeout=30, download_only=False, download_provider=N
     if not isinstance(settings, dict):
         record("config.tools", False, "tools 必须是 JSON 对象")
         settings = {}
-    resolved = {}
-    required_tools = ["python3", "ffmpeg", "ffprobe"]
-    if not download_only:
-        required_tools.extend(("node", "npm", "npx", "hypit"))
+    minimum = (3, 10) if provider == "qiaomu-download" else (3, 8)
+    record("tool:python3", sys.version_info >= minimum,
+           f"{provider} 需要 Python {minimum[0]}.{minimum[1]} 或更高版本", path=sys.executable)
+    required_tools = ["ffmpeg", "ffprobe"] if download_only else ["ffmpeg", "ffprobe", "hypit"]
     for name in required_tools:
         override = settings.get(name) if name == "hypit" else None
-        launcher, reason = resolve_tool(name, override)
+        launcher, reason = resolve_tool(name, override, workspace_dirs)
         if not launcher:
             record("tool:" + name, False, reason)
             continue
-        resolved[name] = launcher
-        passed, output, reason = run_local([launcher, *COMMANDS[name]], timeout)
-        details = {"path": launcher}
-        if passed and name == "node":
-            match = re.search(r"\bv(\d+)\.(\d+)\.(\d+)\b", output)
-            version = tuple(map(int, match.groups())) if match else None
-            passed = version is not None and version >= (22, 15, 0)
-            reason = "Node.js 必须为 22.15.0 或更高版本"
-            if version:
-                details["version"] = ".".join(map(str, version))
-        if passed and name == "python3":
-            match = re.search(r"Python (\d+)\.(\d+)", output)
-            minimum = (3, 10) if provider == "qiaomu-download" else (3, 8)
-            passed = bool(match and tuple(map(int, match.groups())) >= minimum)
-            reason = f"{provider} 需要 Python {minimum[0]}.{minimum[1]} 或更高版本"
-        record("tool:" + name, passed, reason, **details)
+        passed, _, reason = run_local([launcher, *COMMANDS[name]], timeout)
+        record("tool:" + name, passed, reason, path=launcher)
+        if name == "hypit":
+            record("hypit.media", passed, reason)
 
-    if provider == "wechat-video-downloader" and "python3" in resolved:
+    if provider == "wechat-video-downloader":
         passed, _, _ = run_local(
-            [resolved["python3"], "-c", "import requests; print(requests.__version__)"], timeout
+            [sys.executable, "-c", "import requests; print(requests.__version__)"], timeout
         )
         record("python:requests", passed, "tool:python3 对应的环境未能导入 requests，请在该环境中安装或修复此包",
-               path=resolved["python3"])
-
-    if "hypit" in resolved:
-        passed, help_text, reason = run_local([resolved["hypit"], "media", "--help"], timeout)
-        commands = ("probe", "tile", "tiles", "boundaries")
-        absent = [cmd for cmd in commands if "hypit media " + cmd + " " not in help_text]
-        record("hypit.media", passed and not absent, reason or "缺少媒体命令：" + ", ".join(absent))
+               path=sys.executable)
 
     if not download_only:
         check_transcription(config, settings, timeout, record)
@@ -335,7 +328,7 @@ def check(config_path=None, timeout=30, download_only=False, download_provider=N
         "not_checked": ["wechat_media_access", "remote_skill_updates", "transcription_inference"],
         "next_action": (
             "按 references/setup-and-updates.md 安装缺少的普通依赖并复检；配置错误按原选择修正。"
-            if missing else "按 references/skill-updates.md 核对来源，使用已定位工具处理本次链接。"
+            if missing else "使用已定位的下载器和工具处理本次链接。"
         ),
     }
 
@@ -347,10 +340,16 @@ def main(argv=None):
     parser.add_argument("--download-only", action="store_true", help="只检查视频下载与文件验证所需的依赖")
     parser.add_argument("--download-provider", choices=user_config.DOWNLOAD_PROVIDERS,
                         help="仅本次使用指定下载器。推荐红狐 wechat-video-downloader，也可选乔木 qiaomu-download")
+    parser.add_argument("--workspace", type=Path, help="从临时目录执行时，指定实际项目根目录以查找已安装依赖")
+    parser.add_argument("--skill-root", type=Path, action="append", default=[],
+                        help="优先搜索 Agent 提供的 Skill 目录或其父目录，可重复指定，仅本次生效")
     args = parser.parse_args(argv)
     if not 1 <= args.timeout <= 120:
         parser.error("--timeout 必须在 1 到 120 秒之间")
-    result = check(args.config, args.timeout, args.download_only, args.download_provider)
+    if args.workspace is not None and not args.workspace.expanduser().is_dir():
+        parser.error("--workspace 必须指向现有项目目录")
+    result = check(args.config, args.timeout, args.download_only, args.download_provider,
+                   args.workspace, args.skill_root)
     emit(result)
     return 0 if result["ok"] else 2
 

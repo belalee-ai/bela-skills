@@ -3,6 +3,7 @@
 
 import argparse
 from contextlib import contextmanager
+import errno
 import json
 import os
 from pathlib import Path
@@ -18,6 +19,9 @@ OLD_NAME = "bela-wechat-video-download-copy-to-lark"
 DEFAULT_ROOT = "~/视频号爆款拆解"
 MODES = ("local", "feishu", "both")
 DOWNLOAD_PROVIDERS = ("wechat-video-downloader", "qiaomu-download")
+UNSUPPORTED_LOCK = {errno.ENOSYS, getattr(errno, "ENOTSUP", errno.ENOSYS),
+                    getattr(errno, "EOPNOTSUPP", errno.ENOSYS)}
+UNWRITABLE = {errno.EACCES, errno.EPERM, errno.EROFS} | UNSUPPORTED_LOCK
 
 
 def config_path():
@@ -163,8 +167,6 @@ def migrated_config(data, previous):
 
 @contextmanager
 def settings_lock(directory):
-    if directory.is_symlink():
-        raise ValueError("个人配置目录需为真实目录")
     directory.mkdir(mode=0o700, exist_ok=True)
     lock_path = directory / ("." + NAME + ".lock")
     flags = os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0)
@@ -178,7 +180,12 @@ def settings_lock(directory):
             msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
         else:
             import fcntl
-            fcntl.flock(handle, fcntl.LOCK_EX)
+            try:
+                fcntl.flock(handle, fcntl.LOCK_EX)
+            except OSError as error:
+                if error.errno not in UNSUPPORTED_LOCK:
+                    raise
+                fcntl.lockf(handle, fcntl.LOCK_EX)
         yield
 
 
@@ -202,36 +209,66 @@ def write_atomic(path, data):
 
 
 def load_settings(path):
-    if path.parent.is_symlink():
-        raise ValueError("个人配置目录需为真实目录")
-    if path.is_symlink():
-        raise ValueError("个人配置文件需为真实文件")
-    if path.exists():
-        if not stat.S_ISREG(path.stat().st_mode):
-            raise ValueError("个人配置路径需为普通文件")
-        original = read_json(path)
-        data = migrated_config(original, path) if original["schema_version"] == 1 else original.copy()
-        return original, data
-    old = legacy_path()
-    data = migrated_config(read_json(old), old) if old else read_json(SKILL_DIRECTORY / "config.example.json")
-    return None, data
+    try:
+        mode = path.lstat().st_mode
+    except FileNotFoundError:
+        old = legacy_path()
+        data = migrated_config(read_json(old), old) if old else read_json(SKILL_DIRECTORY / "config.example.json")
+        return None, data
+    if not stat.S_ISREG(mode):
+        raise ValueError("个人配置文件需为普通文件")
+    original = read_json(path)
+    data = migrated_config(original, path) if original["schema_version"] == 1 else original.copy()
+    return original, data
+
+
+def merged_settings(data, changes=None, download_changes=None):
+    delivery = clean_delivery(data.get("delivery", {}))
+    download = clean_download(data.get("download", {}))
+    return {**data, "delivery": clean_delivery({**delivery, **(changes or {})}),
+            "download": clean_download({**download, **(download_changes or {})})}
+
+
+def read_preferences():
+    _, data = load_settings(config_path())
+    return merged_settings(data)
+
+
+def settings_result(changes=None, *, download_changes=None):
+    path = config_path()
+    try:
+        with settings_lock(path.parent):
+            original, data = load_settings(path)
+            updated = merged_settings(data, changes, download_changes)
+            if original is not None:
+                mode = stat.S_IMODE(path.stat().st_mode)
+                if not mode & 0o222 or not os.access(path, os.W_OK):
+                    raise PermissionError(errno.EACCES, "个人配置文件为只读", str(path))
+                if os.name == "posix" and updated == original and (changes or download_changes) and mode & 0o077:
+                    path.chmod(0o600)
+            if updated != original:
+                write_atomic(path, updated)
+        return {"ok": True, "path": str(path), "config": updated}
+    except OSError as error:
+        missing_home = error.errno == errno.ENOENT and not path.parent.parent.exists()
+        if not missing_home and error.errno not in UNWRITABLE:
+            raise
+    # A read-only home can still supply existing preferences for this run.
+    # Read the original again; unreadable or corrupt configuration must surface.
+    stored = read_preferences()
+    if changes or download_changes:
+        merged_settings(stored, changes, download_changes)  # validate explicit input
+    return {"ok": not (changes or download_changes), "status": "preferences_read_only",
+            "path": str(path), "config": stored,
+            "next_action": "当前配置位置无法写入或锁定。本次可沿用已读偏好或使用当次选择。"
+                           "需要记住选择时，请将 ~/.bela-skills-config/ 放在可写的持久目录上。"}
 
 
 def preferences(changes=None, *, download_changes=None):
-    path = config_path()
-    with settings_lock(path.parent):
-        original, data = load_settings(path)
-        if original is not None:
-            path.chmod(0o600)
-        delivery = clean_delivery(data.get("delivery", {}))
-        delivery.update(changes or {})
-        data["delivery"] = clean_delivery(delivery)
-        download = clean_download(data.get("download", {}))
-        download.update(download_changes or {})
-        data["download"] = clean_download(download)
-        if data != original:
-            write_atomic(path, data)
-        return data
+    result = settings_result(changes, download_changes=download_changes)
+    if not result["ok"]:
+        raise PermissionError(result["next_action"])
+    return result["config"]
 
 
 def destination(mode_override, url_override):
@@ -292,12 +329,12 @@ def main():
             result = destination(args.mode, args.feishu_parent_url)
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0 if result["ok"] else 2
-        data = preferences(changes, download_changes=download_changes)
+        result = settings_result(changes, download_changes=download_changes)
     except (ValueError, OSError) as error:
         print(json.dumps({"ok": False, "path": str(config_path()), "error": str(error)}, ensure_ascii=False))
         return 2
-    print(json.dumps({"ok": True, "path": str(config_path()), "config": data}, ensure_ascii=False, indent=2))
-    return 0
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["ok"] else 2
 
 
 if __name__ == "__main__":
