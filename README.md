@@ -235,17 +235,17 @@ npx skills add belalee-ai/bela-skills --skill bela-draw-your-font
 
 | Skill | 用途 |
 | --- | --- |
-| [视频号拆解归档 · `bela-wechat-video-download-copy-to-lark`](skills/bela-wechat-video-download-copy-to-lark/SKILL.md) | 按时间轴拆视频号链接，按用户配置归档到飞书。 |
+| [视频号下载与拆解 · `bela-wechat-channel-video-download-and-analysis`](skills/bela-wechat-channel-video-download-and-analysis/SKILL.md) | 下载视频号成片，提取带时间码的口播稿和配图拆解报告，可保存到本地或飞书。 |
 | [视频号口播复刻 · `bela-channels-remake`](skills/bela-channels-remake/SKILL.md) | 沿用参考视频的结构和节奏，重写口播和镜头表（作者工作流）。 |
 | [小红书笔记拆解 · `bela-xhs-analysis`](skills/bela-xhs-analysis/SKILL.md) | 读取并分析单篇小红书笔记，提炼内容结构。 |
 
 <details>
 <summary>拆解与归档：单项安装命令</summary>
 
-视频号拆解归档
+视频号下载与拆解
 
 ```bash
-npx skills add belalee-ai/bela-skills --skill bela-wechat-video-download-copy-to-lark
+npx skills add belalee-ai/bela-skills --skill bela-wechat-channel-video-download-and-analysis
 ```
 
 视频号口播复刻
@@ -356,11 +356,13 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 | `bela-progress-companion` | 先配合 `bela-jindutiao` 判断是否需要角色。随包提供角色素材、分层模板和动作参考。 |
 | `bela-wechat-cover` | 标题与版式可先准备；生成成品需图片生成工具和当次真人照片。DBS 标题库可选。 |
 | `bela-ip-pic` | 围绕作者的 Bela 角色与参考资产工作，不是通用的人物替换工具。 |
-| `bela-wechat-video-download-copy-to-lark` | 依赖视频号下载、Hypit、飞书 CLI、FFmpeg、转录等工具与配套 Skill；先配置自己的账号、权限和归档位置，并通过其依赖检查。 |
+| `bela-wechat-channel-video-download-and-analysis` | 下载使用 `qiaomu-download`。用 FFmpeg 近无损压缩，以画面清晰为先。转录与 Hypit 拆解的准备见 Skill 说明。选飞书时再安装或复用飞书 CLI，并授权访问自己的云盘和文档。 |
 | `bela-xhs-analysis` | 依赖可用的内容读取工具或 Python 路径；需要登录态时使用自己的账号配置。 |
 | `bela-tiny-png` | 需要 TinyPNG API key 与 Python 依赖；运行时会上传待处理图片，留意服务配额。 |
 | `bela-draw-your-font` | 需要 Node.js ≥ 18，首次运行可能需要通过 npm 安装 CLI，字体在本地生成。改编自 [Danilo Znamerovszkij 的 draw-your-font](https://github.com/danilo-znamerovszkij/draw-your-font)，保留 MIT 许可。 |
 | 漫画、封面、IP、视频帧艺术化等视觉任务 | 需要对应的图片生成或编辑能力；安装 Skill 本身不会提供生成服务。 |
+
+视频号下载与拆解会在本机 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config` 用 JSON 记住保存方式、本地根目录和飞书父位置。首次未选择时会询问。可以说「这次只存本地」「以后都存这个飞书文件夹」或「忘记保存方式」。选择本地时无需飞书账号。
 
 例如，安装 B-roll 配画及其配套流程：
 

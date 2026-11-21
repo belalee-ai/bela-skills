@@ -93,11 +93,11 @@
       "path": "skills/bela-topic-picker/SKILL.md"
     },
     {
-      "name": "bela-wechat-video-download-copy-to-lark",
+      "name": "bela-wechat-channel-video-download-and-analysis",
       "category": "拆解与归档",
-      "title": "视频号拆解归档",
-      "summary": "按时间轴拆视频号链接，按用户配置归档到飞书。",
-      "path": "skills/bela-wechat-video-download-copy-to-lark/SKILL.md"
+      "title": "视频号下载与拆解",
+      "summary": "下载视频号成片，提取带时间码的口播稿和配图拆解报告，可保存到本地或飞书。",
+      "path": "skills/bela-wechat-channel-video-download-and-analysis/SKILL.md"
     },
     {
       "name": "bela-channels-remake",

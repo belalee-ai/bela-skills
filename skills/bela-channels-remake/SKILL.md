@@ -1,6 +1,6 @@
 ---
 name: bela-channels-remake
-description: "贝拉视频号复刻策划（录制前）：拿飞书里已拆解的参考视频号，按它的话术逻辑和节奏写 Lidali 自己的口播稿，并出一张逐句镜头表（哪句复用对方哪段素材、哪句要找新素材、哪里做数字对比或冲击花字）。用户选择复刻、说复刻这条视频号、写复刻稿、出镜头表时使用。录完口播后的剪辑交给 bela-channels-recut。收录于 bela-skills。"
+description: "贝拉视频号复刻策划（录制前）：拿本地或飞书里已拆解的参考视频号，按它的话术逻辑和节奏写 Lidali 自己的口播稿，并出一张逐句镜头表（哪句复用对方哪段素材、哪句要找新素材、哪里做数字对比或冲击花字）。用户选择复刻、说复刻这条视频号、写复刻稿、出镜头表时使用。录完口播后的剪辑交给 bela-channels-recut。收录于 bela-skills。"
 metadata:
   version: "0.1.0"
   created: "2026-11-03"
@@ -15,7 +15,7 @@ metadata:
 
 | 顺序 | 做什么 | Skill |
 |---|---|---|
-| ① 拆解 | 下载参考视频、Hypit 分析、归档飞书 | `bela-wechat-video-download-copy-to-lark` |
+| ① 拆解 | 下载参考视频、Hypit 分析、保存到本地或飞书 | `bela-wechat-channel-video-download-and-analysis` |
 | ② **复刻策划** | 口播稿 + 镜头表 + 素材准备 | **本 Skill** |
 | ③ 录口播 | Lidali 自己录 | — |
 | ④ 剪辑成片 | 粗剪、铺素材、字幕、花字、音效、出片 | `bela-channels-recut` |
@@ -24,13 +24,13 @@ metadata:
 
 ## 输入
 
-- 飞书「视频拆解 / {MMDD}-{博主}｜{标题}」三件：【视频】原片、【口播稿】、【视频拆解】（`lark-cli docs +fetch --as user`）。
-- ①留下的 Hypit 工作目录（通常 `~/Documents/Codex/{日期}/task*/work/{视频号短链ID}/`）：`ANALYSIS.md`（整片怎么起作用）、`TIMELINE.md`（逐段时间、话术、画面）、`word-grids/`（带字的时间网格）、`source/` 原片。**有就直接用，不重新分析**。
+- 从上游交付目录取【视频】、【口播稿】和【视频拆解】。本地直接读两份 Markdown 和相对引用的配图。飞书归档中的拆解是在线文档，用 `lark-cli docs +fetch --doc <报告链接> --as user` 读取，视频和口播稿从对应文件读取。
+- ①任务收据中记录的 Hypit 工作目录：`ANALYSIS.md`（整片怎么起作用）、`TIMELINE.md`（逐段时间、话术、画面）、`word-grids/`（带字的时间网格）、`source/` 原片。**有就直接用，不重新分析**。
 - Lidali 这次的角度或要改的点（没有就按参考的主题走，开写前问一句）。
 
 ## 流程
 
-1. **读懂参考**：读 ANALYSIS / TIMELINE 和飞书拆解，按 Hypit 的改编方法（`~/.agents/skills/hypit/references/creation/transformations.md`）列出：段落顺序、每段时长、每段承担什么（钩子、权威、承诺、个人利益、升级、收束），以及参考里每个画面变化是在回应哪句话。
+1. **读懂参考**：读上游拆解报告和已有的 ANALYSIS / TIMELINE，按 Hypit 的改编方法（`~/.agents/skills/hypit/references/creation/transformations.md`）列出：段落顺序、每段时长、每段承担什么（钩子、权威、承诺、个人利益、升级、收束），以及参考里每个画面变化是在回应哪句话。
 2. **核实事实**：参考里的数字、人物原话、事件时间，能找一手来源就找；找不到的不写成确定说法，标在稿末「待核实」。
 3. **写口播稿**：用 `bela-spoken-script`，并读取用户提供的口播风格。段落顺序和每段时长跟参考一致，句子全部重写成 用户自己的表达。按 [录制提醒](references/recording-tips.md) 写好开头第一句（约 1 秒的问候或钩子）。
    - **共鸣、转折冲突、数字一定前置**：全片第一句和每段第一句，从 [经典短句与前置规则](references/hook-phrases.md) 里挑能引发共鸣、制造反差或带数字的说法开头，数字放在句子前半截。删掉参考里没出处的数字或夸张说法时，要保留同等强度的反应和冲突感，不能写平。

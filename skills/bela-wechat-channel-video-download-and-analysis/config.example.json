@@ -1,10 +1,9 @@
 {
-  "schema_version": 1,
-  "destination": {
-    "space_name": "贝拉自媒体秘密基地",
-    "node_title": "视频拆解",
-    "node_path": null,
-    "parent_wiki_url": null
+  "schema_version": 2,
+  "delivery": {
+    "mode": null,
+    "local_root": "~/视频号爆款拆解",
+    "feishu_parent_url": null
   },
   "transcription": {
     "mode": "whisper-local",

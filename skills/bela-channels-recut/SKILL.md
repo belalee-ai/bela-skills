@@ -11,7 +11,7 @@ metadata:
 
 把 Lidali 录好的口播剪成视频号竖屏成片。只服务 Lidali 本人的视频号。
 
-**上游**：`bela-channels-remake`（复刻策划）交付的口播稿和 `镜头表.md`；再往前是 `bela-wechat-video-download-copy-to-lark` 归档在飞书的参考视频和拆解。没有镜头表时（比如不是复刻，是自己的观点），先按 `bela-channels-remake` 的镜头表格式补一张再剪。
+**上游**：`bela-channels-remake`（复刻策划）交付的口播稿和 `镜头表.md`；再往前是 `bela-wechat-channel-video-download-and-analysis` 保存在本地或飞书的参考视频和拆解。没有镜头表时（比如不是复刻，是自己的观点），先按 `bela-channels-remake` 的镜头表格式补一张再剪。
 **本 Skill 的输入**：本人口播原片（由用户提供路径，如 `原视频.MOV`）+ 口播稿 + 镜头表 + `素材/`。
 **交付**：工程目录内 `粗剪.mp4`、`精剪初版.mp4`、`剪辑记录.md`、`素材/来源.md`。默认不发布、不回填飞书，除非当次要求。
 

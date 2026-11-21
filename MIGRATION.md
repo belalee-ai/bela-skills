@@ -1,5 +1,15 @@
 # 迁移清单
 
+## 视频号下载与拆解改名
+
+`bela-wechat-video-download-copy-to-lark` 已改名为 [`bela-wechat-channel-video-download-and-analysis`](skills/bela-wechat-channel-video-download-and-analysis/SKILL.md)。更新按名称调用的命令、工作流和本机 Skill 引用。项目级安装命令如下。
+
+```bash
+npx skills add belalee-ai/bela-skills --skill bela-wechat-channel-video-download-and-analysis
+```
+
+首次使用时选择本地、飞书或两处，之后可复用保存偏好。本地默认在 `~/视频号爆款拆解/` 按视频建目录，交付视频、口播稿和带图 Markdown 拆解报告。飞书默认在当前用户的「我的空间 / 视频号爆款拆解」按视频建目录，也可指定归档位置。迁移已有任务时，可以重新指定自己原先使用的飞书文件夹或知识库父节点链接。新的保存偏好记录在 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`。首次配置中的空值采用上述默认位置。更换设备或账号后，先确认登录身份与父位置再归档。
+
 ## 2026-11-15：统一合集目录
 
 现有 26 个 Skill 从根目录移到 `skills/<name>/`，名称、功能与随包资源保留。合集和单项安装仍使用：

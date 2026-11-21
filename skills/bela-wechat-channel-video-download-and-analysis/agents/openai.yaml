@@ -1,0 +1,4 @@
+interface:
+  display_name: "贝拉 · 视频号下载与拆解"
+  short_description: "下载视频号作品和可用封面，生成口播稿与带图拆解，保存本地或飞书"
+  default_prompt: "使用 $bela-wechat-channel-video-download-and-analysis 下载并拆解一条视频号作品。"
