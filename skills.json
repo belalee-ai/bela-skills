@@ -96,7 +96,7 @@
       "name": "bela-wechat-channel-video-download-and-analysis",
       "category": "拆解与归档",
       "title": "视频号下载与拆解",
-      "summary": "下载视频号成片，提取带时间码的口播稿和配图拆解报告，可保存到本地或飞书。",
+      "summary": "用红狐或乔木下载视频号成片，提取带时间码的口播稿和配图拆解报告，可保存到本地或飞书。",
       "path": "skills/bela-wechat-channel-video-download-and-analysis/SKILL.md"
     },
     {

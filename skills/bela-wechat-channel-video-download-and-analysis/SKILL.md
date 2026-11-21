@@ -2,7 +2,7 @@
 name: bela-wechat-channel-video-download-and-analysis
 description: 下载微信视频号作品，用本地 Whisper 校对口播，用 Hypit 按时间轴做带图拆解，交付 MP4、口播稿、拆解报告和可取得的作品封面。用户只贴 weixin.qq.com/sph/ 链接、要求只下载该视频号到本地、要带图拆解或明确点名时使用。可选本地文件或飞书链接。
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # 贝拉 · 视频号下载与拆解
@@ -12,19 +12,32 @@ metadata:
 启动时先运行 `python3 "$SKILL_DIR/scripts/user_config.py" show`，创建或读取用户主目录下的 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config`（UTF-8 JSON）。仅查看或修改偏好时直接使用 `show` 或 `set` 并回读指定字段，无需作品链接。开始下载和拆解时按以下顺序执行。
 
 1. 接受一条 `https://weixin.qq.com/sph/作品ID`，包括分享文字中的链接。明确调用但缺链接时只提示「请粘贴微信视频号分享链接。」拿到链接后再准备工具。同一请求给多条作品链接时，每条单独处理、建目录和报告进度。
-2. 拿到有效链接后，按已读取的交付偏好选择保存位置。
-   - 先看当次要求，再看 `delivery.mode`。两者都没指定时才问「你想保存在本地，还是拿飞书链接？」本地使用 `delivery.local_root`，默认 `~/视频号爆款拆解/`。飞书使用 `delivery.feishu_parent_url`，空值代表当前用户的「我的空间 / 视频号爆款拆解」。
-   - 用户选好后说明下次将沿用。比如执行 `python3 "$SKILL_DIR/scripts/user_config.py" set --mode local --local-root "$LOCAL_ROOT"`。飞书或两者同时保存时，模式分别取 `feishu`、`both`；用户给出常用目标链接时加 `--feishu-parent-url`，这里只在本地记录链接。下载未取得可解码的 MP4，或正在等用户提供素材时，只处理该阻塞；链接的远端核验和飞书登录都留到上传阶段。“仅这次”或“这次测试两种”只覆盖本次。
-   - `set --mode ask` 恢复每次询问，`set --clear-feishu-parent-url` 恢复个人云盘目标。两处都要时共用一次下载与分析。当次明确只下载时准备下载所需依赖和视频交付。
+2. 有效链接到手后，分别读取下载器 `download.provider` 和交付位置 `delivery.mode`。当次指定优先，其次用已保存的值。只问仍缺的选择；两项都缺就一起问。
+   - 首次询问时把「红狐（推荐）」列为第一项，「乔木」列为第二项，等用户明确选择。说明红狐会把分享链接发给红狐，使用自己的 API Key 和账号额度；乔木优先通过本机微信获取。用户选哪项就记住哪项，以后直接沿用。选定后，用 `python3 "$SKILL_DIR/scripts/user_config.py" set --download-provider wechat-video-downloader` 保存红狐；乔木对应 `qiaomu-download`。「以后用……」同样更新默认，「忘记下载器」用 `set --download-provider ask` 清空默认。「仅这次用……」只把选项传给本次依赖检查和下载步骤。询问时说明选定的下载器今后如何处理分享链接。
+   - 保存位置可选本地、飞书或两处。本地沿用 `delivery.local_root`（默认 `~/视频号爆款拆解/`）；飞书沿用 `delivery.feishu_parent_url`（空值代表本人的「我的空间 / 视频号爆款拆解」）。用 `set --mode local|feishu|both` 保存选择；给出常用目录或飞书目标时分别加 `--local-root` 或 `--feishu-parent-url`。「仅这次」只覆盖本次。`set --mode ask` 恢复询问，`set --clear-feishu-parent-url` 恢复个人云盘目标。
+   - 两处交付共用一次下载与分析。明确只下载时仅准备下载和视频交付所需工具。等待素材或下载失败时，飞书目标核验和登录均留到成品可上传时。
 3. 在自己的任务工作区为每条分享链接建独立工作目录。保留来源、未转码的源文件、原始识别和阶段收据。收据只存分享链接、可信作品信息、已核验的本地路径/哈希、飞书目标及返回的文件标识。重复运行按来源和目标作匹配，核实已有文件再续跑。不同来源碰巧同名时保留原目录，询问新的保存名。敏感的临时媒体地址及账号凭据留在下载器内。
 
 ## 下载与确认作品资料
 
-1. 按[安装和检查依赖](references/setup-and-updates.md)补齐本次所需的工具和模型。下载使用 [qiaomu-download](https://github.com/joeseesun/qiaomu-download) 的内置视频号适配器。按[上游视频号适配器说明](https://github.com/joeseesun/qiaomu-download/blob/main/references/wechat-video.md)读取已安装版本，并按[定向更新](references/skill-updates.md)核对来源。通过依赖检查返回的路径定位它；以用户输入的分享链接明确调用下载，无需用户再说一次“下载”。
-2. 运行 `python3 "$QIAOMU_DIR/scripts/download.py" download "$SHARE_URL" --dir "$SOURCE_DIR" --single-version`。核实成功结果中的文件存在、可解码，用 FFprobe 读取时长、尺寸、帧率、音视频流。下载阶段的成功结果才可以进入分析。若下载器没有可用本地连接，向用户说明首次设置或将本次分享链接交给其固定在线解析器的选择。只有取得本次同意才添加 `--wechat-online allowed`。若返回 `manual_action_required`，提示在电脑微信中打开并播放该作品；收到「已播放」后加 `--wait-page 90` 继续。按上游说明分别处理首次证书信任、系统代理和上游许可。不要自动操作微信界面。失败时保留工作区，报告下载器的实际阶段。
-3. 从明确属于同一条作品的元数据或公开分享页取博主和原标题。在线下载成功且仍缺作品信息时，可复用本次同意和下载结果实际返回的 resolver，运行 `python3 scripts/online_metadata.py --url "$SHARE_URL" --qiaomu-dir "$QIAOMU_DIR" --approved-resolver "$RESOLVER" --source-dir "$SOURCE_DIR"`，读取同一服务的署名、标题与可验证的原封面。本地路线不调用该命令。若描述兼作标题，取首个非空行，保留完整描述。把已确认的标题原文（包括末尾的「。」）传给命名脚本，由脚本单独处理口播稿的句号。作者需要作品署名作为依据；不能从下载文件名、人脸、水印或口播猜测。可以读取普通浏览器可访问的公开分享页；需要用户登录、微信内操作或仍缺字段时，只询问缺失的博主或标题。下载已经成功的文件继续复用。
-4. **作品原封面**为可选交付。检查下载结果中的显式作品封面、同条作品公开分享页中可确认对应的封面资源，或用户提供的该作品原封面。校验能解码、归属正确、格式与扩展名一致。通用微信图标、账号头像、分享卡占位图和视频截帧都不能冒充作品封面。没有可核验的原图时继续交付，注明「未取得作品原封面」。乔木当前统一接口可能只返回视频和部分元数据。
-5. 用 `python3 scripts/archive_names.py --url "$SHARE_URL" --author "$AUTHOR" --title "$TITLE"` 生成名称。取得封面时增加 `--cover-ext` 和真实扩展名。目录日期取归档当天的当地日期；重试复用最初的日期与目录。
+按[安装和检查依赖](references/setup-and-updates.md)准备所选下载器，再按[定向更新](references/skill-updates.md)核对它的来源。只走本次选定的一条路线。失败时说明实际原因并保留工作区；用户选用另一家后才切换。
+
+### 红狐 · wechat-video-downloader
+
+首次缺少上游 Skill 时用 `npx skills add https://github.com/redfox-data/redfox-community --skill wechat-video-downloader` 安装。从依赖检查取红狐目录和可导入 `requests` 的 Python，按[红狐下载](references/redfox-download.md)运行适配器。它使用用户本机的 `REDFOX_API_KEY` 向红狐解析当前链接，再把视频及可取得的封面下载到本条作品的工作目录。仅把下载器名称写入偏好。缺少密钥时请用户在本机设置后重试；遇到额度或服务错误时报告原因。红狐返回标题或描述，博主仍需核实。
+
+### 乔木 · qiaomu-download
+
+从依赖检查取得 `$QIAOMU_DIR`，读取已安装的 `$QIAOMU_DIR/references/wechat-video.md`。运行 `python3 "$QIAOMU_DIR/scripts/download.py" download "$SHARE_URL" --dir "$SOURCE_DIR" --single-version`。若返回 `manual_action_required`，提示在电脑微信打开并播放作品，收到「已播放」后加 `--wait-page 90` 继续。首次证书信任、系统代理和许可按上游提示处理。
+
+没有可用本地连接时，说明设置本地后端和使用乔木在线解析器两个选项。只有用户同意**这次**发送分享链接才加 `--wechat-online allowed`。在线下载成功且作品信息仍缺时，可复用本次返回并已获同意的 resolver，运行 `python3 "$SKILL_DIR/scripts/online_metadata.py" --url "$SHARE_URL" --qiaomu-dir "$QIAOMU_DIR" --approved-resolver "$RESOLVER" --source-dir "$SOURCE_DIR"`。本地下载不调用在线补资料接口。
+
+### 两条路线共用的核验与命名
+
+1. 核实取得的本地文件存在且为可解码的视频，用 FFprobe 读取时长、尺寸、帧率和音视频流。通过后再分析。
+2. 从同一作品的明确元数据或公开分享页取得博主、原标题。若描述兼作标题，取首个非空行并保留完整描述。作者需有作品署名，不从文件名、人脸、水印或口播猜测。仍缺哪一项就只问哪一项，复用已下载的文件。
+3. 原封面可来自下载结果、同一作品的公开分享页或用户。校验能解码、确属该作品、格式与扩展名一致。微信图标、头像、分享卡占位图和视频截帧都不能当作原封面。没有可核验的图时注明「未取得作品原封面」，继续交付。
+4. 把完整原标题（含末尾的「。」）传给 `python3 "$SKILL_DIR/scripts/archive_names.py" --url "$SHARE_URL" --author "$AUTHOR" --title "$TITLE"`。取得封面时加 `--cover-ext` 和真实扩展名。目录日期取归档当天的当地日期，重试时复用最初的日期与目录。
 
 ## 分析与压缩
 

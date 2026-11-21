@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Manage personal delivery preferences for the WeChat Channels analysis skill."""
+"""Manage personal download and delivery preferences for WeChat Channels analysis."""
 
 import argparse
 from contextlib import contextmanager
@@ -17,6 +17,7 @@ NAME = "bela-wechat-channel-video-download-and-analysis"
 OLD_NAME = "bela-wechat-video-download-copy-to-lark"
 DEFAULT_ROOT = "~/视频号爆款拆解"
 MODES = ("local", "feishu", "both")
+DOWNLOAD_PROVIDERS = ("wechat-video-downloader", "qiaomu-download")
 
 
 def config_path():
@@ -75,6 +76,15 @@ def clean_delivery(data, preserve_unknown=True):
     return delivery
 
 
+def clean_download(data):
+    if not isinstance(data, dict):
+        raise ValueError("download 应为含下载器偏好的 JSON 对象")
+    provider = data.get("provider")
+    if provider is not None and provider not in DOWNLOAD_PROVIDERS:
+        raise ValueError("download.provider 应为 null、wechat-video-downloader 或 qiaomu-download")
+    return {**data, "provider": provider}
+
+
 def legacy_path():
     home = Path.home()
     codex_home = Path(os.environ.get("CODEX_HOME") or home / ".codex").expanduser()
@@ -90,7 +100,7 @@ def public_sources(sources):
         raise ValueError("skill_sources 应为 JSON 对象")
     result = {}
     for skill, info in sources.items():
-        if skill not in ("qiaomu-download", "hypit"):
+        if skill not in (*DOWNLOAD_PROVIDERS, "hypit"):
             continue
         fields = info if isinstance(info, dict) else {"source": info}
         entry = {}
@@ -142,6 +152,7 @@ def migrated_config(data, previous):
         raise ValueError("skill_roots 只能包含文件系统目录")
     final["skill_roots"] = [str((previous.parent / Path(item).expanduser()).resolve()) for item in roots]
     final["skill_sources"] = public_sources(data.get("skill_sources", {}))
+    final["download"]["provider"] = clean_download(data.get("download", {}))["provider"]
     explicit = data.get("destination")
     if "delivery" in data:
         final["delivery"] = clean_delivery(data["delivery"], preserve_unknown=False)
@@ -190,7 +201,7 @@ def write_atomic(path, data):
         temp_path.unlink(missing_ok=True)
 
 
-def preferences(changes=None):
+def preferences(changes=None, *, download_changes=None):
     path = config_path()
     with settings_lock(path.parent):
         if path.is_symlink():
@@ -208,6 +219,9 @@ def preferences(changes=None):
         delivery = clean_delivery(data.get("delivery", {}))
         delivery.update(changes or {})
         data["delivery"] = clean_delivery(delivery)
+        download = clean_download(data.get("download", {}))
+        download.update(download_changes or {})
+        data["download"] = clean_download(download)
         if data != original:
             write_atomic(path, data)
         return data
@@ -220,6 +234,8 @@ def main():
     commands.add_parser("show")
     update = commands.add_parser("set")
     update.add_argument("--mode", choices=(*MODES, "ask"))
+    update.add_argument("--download-provider", choices=(*DOWNLOAD_PROVIDERS, "ask"),
+                        help="保存已选下载器。推荐红狐 wechat-video-downloader，也可选乔木 qiaomu-download；ask 恢复询问")
     local = update.add_mutually_exclusive_group()
     local.add_argument("--local-root")
     local.add_argument("--clear-local-root", action="store_true")
@@ -228,17 +244,20 @@ def main():
     remote.add_argument("--clear-feishu-parent-url", action="store_true")
     args = parser.parse_args()
     changes = {}
+    download_changes = {}
     if args.command == "set":
+        if args.download_provider is not None:
+            download_changes["provider"] = None if args.download_provider == "ask" else args.download_provider
         if args.mode is not None:
             changes["mode"] = None if args.mode == "ask" else args.mode
         if args.local_root is not None or args.clear_local_root:
             changes["local_root"] = DEFAULT_ROOT if args.clear_local_root else args.local_root
         if args.feishu_parent_url is not None or args.clear_feishu_parent_url:
             changes["feishu_parent_url"] = args.feishu_parent_url
-        if not changes:
-            parser.error("set 至少须指定一项保存偏好")
+        if not changes and not download_changes:
+            parser.error("set 至少须指定一项偏好")
     try:
-        data = preferences(changes)
+        data = preferences(changes, download_changes=download_changes)
     except (ValueError, OSError) as error:
         print(json.dumps({"ok": False, "path": str(config_path()), "error": str(error)}, ensure_ascii=False))
         return 2

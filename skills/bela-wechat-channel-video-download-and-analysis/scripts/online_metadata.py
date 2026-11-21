@@ -38,11 +38,13 @@ class ImageRedirect(HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def save_cover(url, folder):
+def save_cover(url, folder, *, opener=None):
     folder.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(dir=folder) as stage:
         request = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with build_opener(ImageRedirect()).open(request, timeout=20) as response:
+        if opener is None:
+            opener = build_opener(ImageRedirect())
+        with opener.open(request, timeout=20) as response:
             data = response.read(MAX_IMAGE_BYTES + 1)
         if not data or len(data) > MAX_IMAGE_BYTES:
             raise ValueError("empty or oversized cover")

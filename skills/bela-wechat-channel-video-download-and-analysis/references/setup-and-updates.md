@@ -1,6 +1,11 @@
 # 第一次处理视频号链接
 
-调用时先运行下文个人配置的 `init`。随后从请求中提取作品分享链接；只收到技能名时请用户贴链接。拿到有效链接后由 Agent 安装本次缺少的普通依赖并复检。用户只要视频时用下载模式。用户选本地或尚未选保存位置时，都可以在本地准备素材。选择飞书可以先保存位置偏好。归档所需文件已经就绪后，再按[飞书归档](lark-archive.md)使用本机 CLI 读取目标；下载或分析阶段无需飞书登录。
+调用时先运行下文个人配置的 `init`。只收到技能名时请用户贴作品分享链接；仅查看或更改偏好时可以直接处理。拿到有效链接后，优先使用当次指定的下载器，其次读取 `download.provider`。两者都为空时按下列顺序询问，等用户确认。已有偏好就直接沿用。
+
+- **红狐（推荐）`wechat-video-downloader`** 会把分享链接发给红狐解析，使用用户自己的红狐 API Key，受账号额度限制。[红狐使用说明](https://github.com/redfox-data/redfox-community/blob/main/skills/wechat-video-downloader/SKILL.md)
+- **乔木 `qiaomu-download`** 优先通过本机微信获取。需要使用乔木在线解析时，先征得用户对本次转交链接的同意。
+
+首次选定后保存为常用下载器。用户说「仅这次」时只覆盖本次。只安装、检查和更新选中的下载器。解析失败时报告该下载器返回的原因，等用户明确选择后才能改用另一家。用户只要成片时用下载模式。选择飞书可以先保存位置偏好，归档所需文件就绪后再按[飞书归档](lark-archive.md)读取目标。
 
 ## 查现有安装
 
@@ -8,12 +13,12 @@
 
 ```sh
 python3 "$SKILL_DIR/scripts/check_dependencies.py"
-# 用户明确只要视频时
-python3 "$SKILL_DIR/scripts/check_dependencies.py" --download-only
+# 用户本次指定红狐且只要视频时
+python3 "$SKILL_DIR/scripts/check_dependencies.py" --download-provider wechat-video-downloader --download-only
 # 如有用户指定的配置，为上述命令添加 --config "$CONFIG_FILE"
 ```
 
-读取 JSON 的 `checks` 和 `missing_dependencies`。每项由 `dependency` 标识。用 `skill:qiaomu-download.path` 定位上游工具，用 `tool:hypit.path` 调用所选 Hypit。检查通过表示本地程序、所需帮助和文件可访问。成功取得成片、识别和服务调用要分别验证。重复运行时复用已通过的安装和模型。
+未选下载器时脚本返回 `status: download_provider_required` 并以 2 退出，应先询问选择。选定后读取 JSON 的 `download_provider`、`checks` 和 `missing_dependencies`。每项由 `dependency` 标识。从 `skill:<所选下载器名称>` 项的 `path` 取得上游目录。完整拆解还需读取 `tool:hypit` 的 `path`。检查通过表示本地依赖可用，媒体获取、识别和服务调用分别在实际运行时验证。
 
 ## 补齐本次所需项
 
@@ -21,14 +26,17 @@ python3 "$SKILL_DIR/scripts/check_dependencies.py" --download-only
 
 | 缺少项 | Agent 的处理 |
 | --- | --- |
-| Python、Node 或 npx | 下载器需 Python 3.10+；当前 Hypit 需 Node.js 22.15+ 和 npm。用已有版本管理器安装兼容版本并激活，例如已有 nvm 时运行 `nvm install --lts`。npm 提供 npx。仅下载且 qiaomu 已装时无需 Node。 |
+| Python、Node 或 npx | 乔木需 Python 3.10+，红狐适配器需 Python 3.8+ 和同一解释器中的 `requests`。缺少 `requests` 时可在任务 venv 里运行 `python3 -m pip install requests`，激活该环境后复检并运行下载。通过 skills CLI 安装时需要 npx。完整拆解使用的 Hypit 需 Node.js 22.15+ 和 npm。 |
 | qiaomu-download | 在用户的任务项目中运行 `npx skills add joeseesun/qiaomu-download --skill qiaomu-download -y`。沿用现有 Agent 和项目或全局范围；用户级安装才加 `-g`。首次用 npx 时可设 `npm_config_yes=true` 允许获取 skills CLI。安装后读取 `SKILL.md` 和 `references/wechat-video.md`。[上游安装说明](https://github.com/joeseesun/qiaomu-download) |
-| FFmpeg、FFprobe、yt-dlp | FFmpeg 提供 ffprobe。macOS 已有 Homebrew 时只安装缺少的包，如 `brew install ffmpeg` 或 `brew install yt-dlp`；已有 uv 时也可用 `uv tool install 'yt-dlp[default]'`。Linux 可通过系统包管理器安装 ffmpeg。按所用安装器把二进制目录加入本次进程 PATH，再检查。[FFmpeg 分发](https://ffmpeg.org/download.html) · [yt-dlp 安装方式](https://github.com/yt-dlp/yt-dlp/wiki/Installation) |
+| wechat-video-downloader | 在任务项目运行 `npx skills add https://github.com/redfox-data/redfox-community --skill wechat-video-downloader`，选择适用的 Agent 和原安装范围。读取所装目录的 `SKILL.md`、`references/core_workflow.md` 和 `scripts/parse_video_download.py`。[红狐官方目录](https://github.com/redfox-data/redfox-community/tree/main/skills/wechat-video-downloader) |
+| FFmpeg、FFprobe | 两条路线都用 FFmpeg / FFprobe 校验和压缩媒体。macOS 已有 Homebrew 时可运行 `brew install ffmpeg`，Linux 可用系统包管理器安装 ffmpeg。将安装目录加入本次进程 PATH 后复检。[FFmpeg 分发](https://ffmpeg.org/download.html) |
 | Hypit Skill | 完整拆解时运行 `npx skills add hypit-ai/hypit --skill hypit -y`，沿用当前安装范围。读取所装版本中的 `references/creation/reference-video.md`。[官方安装说明](https://github.com/hypit-ai/hypit/blob/main/docs/guide/skill.md) |
 | Hypit CLI | 优先用配置或现有项目的 `node_modules/.bin/hypit`。用户级 npm 前缀可写时运行 `npm install --global @hypit/hypit`；若默认前缀需提权，可执行 `npm install --global --prefix "$HOME/.local" @hypit/hypit`，将 `~/.local/bin` 加入本次 PATH。检查 `hypit version` 与 `hypit media --help`。[Hypit 分发说明](https://github.com/hypit-ai/hypit/blob/main/skills/hypit/references/environment/distribution.md) |
 | 本地 Whisper | 默认识别方式。已有 uv 时可用 `uv tool install --python 3.11 openai-whisper`，有 pipx 时可用 `pipx install openai-whisper`。也可以用兼容 Python 创建用户目录内的 venv，再用该 venv 的 pip 安装 `openai-whisper`，把 `tools.whisper` 指向其 CLI。[Whisper 安装说明](https://github.com/openai/whisper#setup) |
 
-普通依赖就绪后按[定向更新](skill-updates.md)核对本次用到的上游 Skill。没有本地微信后端连接属于媒体访问条件，按已安装的 qiaomu 下载器报告处理。首次涉及上游许可、系统信任、系统代理或向第三方转交链接时，分别遵从上游授权范围。获取模型权重可通过本地 Whisper 完成，无须付费识别账户。
+普通依赖就绪后按[定向更新](skill-updates.md)核对本次用到的上游 Skill。乔木报告本地微信未连接时，按所安装版本处理连接、证书信任或系统代理。
+
+红狐解析脚本从进程环境读取 `REDFOX_API_KEY`。用户可在红狐账号中获取 Key，再通过自己的运行环境或凭据管理器提供给脚本。即便使用 OpenClaw 配置，运行脚本的进程也需获得该变量。Bela 的 `download.provider` 字段只保存下载器名称。遇到缺少凭据、无效链接或额度不足时报告具体原因，保留当前下载器和工作目录。[红狐脚本](https://github.com/redfox-data/redfox-community/blob/main/skills/wechat-video-downloader/scripts/parse_video_download.py) · [获取 API Key](https://redfox.hk/settings/api-keys?source=github)
 
 ### 准备用户选定的 Whisper 模型
 
@@ -47,6 +55,9 @@ python3 "$SKILL_DIR/scripts/check_dependencies.py" --download-only
 ```sh
 python3 "$SKILL_DIR/scripts/user_config.py" init
 python3 "$SKILL_DIR/scripts/user_config.py" show
+python3 "$SKILL_DIR/scripts/user_config.py" set --download-provider qiaomu-download
+python3 "$SKILL_DIR/scripts/user_config.py" set --download-provider wechat-video-downloader
+python3 "$SKILL_DIR/scripts/user_config.py" set --download-provider ask
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode local --local-root "$HOME/视频研究"
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode feishu --feishu-parent-url "$FEISHU_PARENT_URL"
 python3 "$SKILL_DIR/scripts/user_config.py" set --mode both
@@ -54,12 +65,13 @@ python3 "$SKILL_DIR/scripts/user_config.py" set --mode ask
 python3 "$SKILL_DIR/scripts/user_config.py" set --clear-local-root --clear-feishu-parent-url
 ```
 
-`init`、`show` 和 `set` 返回 `{ok,path,config}`。从 `config.delivery` 读取保存方式和位置；`--mode ask` 让下次再问，保留已有根目录和父链接。清空本地根目录恢复建议位置，清空飞书父链接恢复「我的空间」默认目标。设置命令只合并给出的字段。提供的新飞书链接会先验证 HTTPS、官方域名与资源路径，查询串和片段会移除。认证仍由飞书 CLI 管理。
+`init`、`show` 和 `set` 返回 `{ok,path,config}`。首次选择或明确更改常用下载器时用 `set --download-provider` 保存名称。「忘记下载器」用 `set --download-provider ask` 将其重置为 `null`。临时覆盖只向依赖检查传 `--download-provider` 并按本次选择下载。保存位置由 `config.delivery` 单独管理。`--mode ask` 让下次再问保存方式，保留已有根目录和父链接。清空本地根目录恢复建议位置，清空飞书父链接恢复「我的空间」默认目标。设置命令只合并给出的字段。提供的新飞书链接会先验证 HTTPS、官方域名与资源路径，查询串和片段会移除。认证仍由飞书 CLI 管理。
 
 首次创建时从原 Skill 的 `config.local.json` 迁移已知工具路径、转录选择和公开来源记录。旧版明确配置的父 Wiki 链接可带入，旧样例的个人知识库名不会成为用户默认位置。原先相对于旧配置的 Skill 搜索目录会转换为绝对路径。后续只读个人配置。文件损坏时保留原文件并返回错误。需要临时指定工具配置时，向依赖检查脚本传 `--config "$CONFIG_FILE"`，该调用仅检查所给 v1/v2 文件。
 
 | 字段 | 用法 |
 | --- | --- |
+| `download.provider` | 新配置或缺少此字段的旧配置按 `null` 处理，首次下载时先推荐红狐，等用户选择。可保存 `wechat-video-downloader`（红狐）或 `qiaomu-download`（乔木）。 |
 | `delivery.mode` | 首次为 `null`，询问本地、飞书或两处。已选的默认方式保存为 `local`、`feishu` 或 `both`。 |
 | `delivery.local_root` | 默认 `~/视频号爆款拆解`，接受绝对路径或 `~/` 开头的路径。 |
 | `delivery.feishu_parent_url` | 默认 `null`。可保存 Lark 或飞书的文件夹、文档或 Wiki 节点 HTTPS 链接。 |

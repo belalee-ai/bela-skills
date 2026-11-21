@@ -1,5 +1,8 @@
 {
   "schema_version": 2,
+  "download": {
+    "provider": null
+  },
   "delivery": {
     "mode": null,
     "local_root": "~/视频号爆款拆解",

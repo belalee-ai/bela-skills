@@ -21,6 +21,7 @@ CORE_FILES = {
         "scripts/wechat/download_media.py", "scripts/wechat/preflight.py",
         "scripts/wechat/download_online.py", "scripts/wechat/release-lock.json",
     ),
+    "wechat-video-downloader": ("scripts/parse_video_download.py", "references/core_workflow.md"),
     "hypit": (
         "references/creation/reference-video.md", "references/creation/project-files.md",
         "references/environment/distribution.md", "references/environment/local-tools.md",
@@ -29,7 +30,7 @@ CORE_FILES = {
 }
 COMMANDS = {
     "python3": ["--version"], "node": ["--version"], "npm": ["--version"],
-    "npx": ["--version"], "hypit": ["version"], "yt-dlp": ["--version"],
+    "npx": ["--version"], "hypit": ["version"],
     "ffmpeg": ["-version"], "ffprobe": ["-version"],
 }
 WHISPER_REQUIRED_FLAGS = (
@@ -90,7 +91,7 @@ def frontmatter_name(path):
 
 
 def command_environment():
-    env = os.environ.copy()
+    env = {key: os.environ[key] for key in os.environ if key != "REDFOX_API_KEY"}
     env.update({
         "npm_config_offline": "true", "NPM_CONFIG_OFFLINE": "true",
         "npm_config_yes": "false", "npm_config_update_notifier": "false",
@@ -212,7 +213,7 @@ def check_transcription(config, settings, timeout, record):
         record("transcription.mode", False, "mode 必须为 whisper-local 或 hypit-transcribe")
 
 
-def check(config_path=None, timeout=30, download_only=False):
+def check(config_path=None, timeout=30, download_only=False, download_provider=None):
     checks = []
     missing = []
 
@@ -229,11 +230,24 @@ def check(config_path=None, timeout=30, download_only=False):
                 user_config.clean_delivery(config.get("delivery"))
         else:
             config = user_config.preferences()
+        saved_provider = user_config.clean_download(config.get("download", {}))["provider"]
+        provider = saved_provider if download_provider is None else download_provider
+        if provider is not None and provider not in user_config.DOWNLOAD_PROVIDERS:
+            raise ValueError("未知下载器，可选择红狐 wechat-video-downloader 或乔木 qiaomu-download")
     except (OSError, ValueError) as error:
         record("config", False, str(error), path=str(selected))
-        config = {}
-    else:
-        record("config", True, path=str(selected))
+        return {
+            "ok": False, "status": "local_dependencies_blocked", "config_path": str(selected),
+            "checks": checks, "missing_dependencies": missing, "next_action": "请修复原配置后重新检查。",
+        }
+    record("config", True, path=str(selected))
+    if provider is None:
+        return {
+            "ok": False, "status": "download_provider_required", "config_path": str(selected),
+            "download_provider": None, "available_providers": list(user_config.DOWNLOAD_PROVIDERS),
+            "checks": checks, "missing_dependencies": [],
+            "next_action": "推荐红狐（需 API Key），也可选乔木。请用户选择并保存偏好，若明确仅本次则用 --download-provider。",
+        }
 
     configured_roots = config.get("skill_roots", [])
     if not isinstance(configured_roots, list) or any(not isinstance(x, str) or not x.strip() for x in configured_roots):
@@ -245,9 +259,9 @@ def check(config_path=None, timeout=30, download_only=False):
         roots.append(candidate if candidate.is_absolute() else selected.parent / candidate)
     roots.extend(standard_skill_roots())
     roots = list(dict.fromkeys(path.resolve() for path in roots))
-    for name, references in CORE_FILES.items():
-        if download_only and name != "qiaomu-download":
-            continue
+    required_skills = [provider] if download_only else [provider, "hypit"]
+    for name in required_skills:
+        references = CORE_FILES[name]
         found = None
         for root in roots:
             for candidate in (root / name, root):
@@ -269,16 +283,17 @@ def check(config_path=None, timeout=30, download_only=False):
         record("config.tools", False, "tools 必须是 JSON 对象")
         settings = {}
     resolved = {}
-    for name, args in COMMANDS.items():
-        if download_only and name not in ("python3", "yt-dlp", "ffmpeg", "ffprobe"):
-            continue
+    required_tools = ["python3", "ffmpeg", "ffprobe"]
+    if not download_only:
+        required_tools.extend(("node", "npm", "npx", "hypit"))
+    for name in required_tools:
         override = settings.get(name) if name == "hypit" else None
         launcher, reason = resolve_tool(name, override)
         if not launcher:
             record("tool:" + name, False, reason)
             continue
         resolved[name] = launcher
-        passed, output, reason = run_local([launcher, *args], timeout)
+        passed, output, reason = run_local([launcher, *COMMANDS[name]], timeout)
         details = {"path": launcher}
         if passed and name == "node":
             match = re.search(r"\bv(\d+)\.(\d+)\.(\d+)\b", output)
@@ -289,9 +304,17 @@ def check(config_path=None, timeout=30, download_only=False):
                 details["version"] = ".".join(map(str, version))
         if passed and name == "python3":
             match = re.search(r"Python (\d+)\.(\d+)", output)
-            passed = bool(match and tuple(map(int, match.groups())) >= (3, 10))
-            reason = "qiaomu-download 需要 Python 3.10 或更高版本"
+            minimum = (3, 10) if provider == "qiaomu-download" else (3, 8)
+            passed = bool(match and tuple(map(int, match.groups())) >= minimum)
+            reason = f"{provider} 需要 Python {minimum[0]}.{minimum[1]} 或更高版本"
         record("tool:" + name, passed, reason, **details)
+
+    if provider == "wechat-video-downloader" and "python3" in resolved:
+        passed, _, _ = run_local(
+            [resolved["python3"], "-c", "import requests; print(requests.__version__)"], timeout
+        )
+        record("python:requests", passed, "tool:python3 对应的环境未能导入 requests，请在该环境中安装或修复此包",
+               path=resolved["python3"])
 
     if "hypit" in resolved:
         passed, help_text, reason = run_local([resolved["hypit"], "media", "--help"], timeout)
@@ -305,6 +328,7 @@ def check(config_path=None, timeout=30, download_only=False):
     return {
         "ok": not missing,
         "status": "local_dependencies_passed" if not missing else "local_dependencies_blocked",
+        "download_provider": provider,
         "config_path": str(selected),
         "checks": checks,
         "missing_dependencies": missing,
@@ -321,10 +345,12 @@ def main(argv=None):
     parser.add_argument("--config", help="只读使用指定 v1/v2 JSON；默认使用用户主目录中的个人配置")
     parser.add_argument("--timeout", type=float, default=30, help="每条本地检查命令的超时秒数（1–120）")
     parser.add_argument("--download-only", action="store_true", help="只检查视频下载与文件验证所需的依赖")
+    parser.add_argument("--download-provider", choices=user_config.DOWNLOAD_PROVIDERS,
+                        help="仅本次使用指定下载器。推荐红狐 wechat-video-downloader，也可选乔木 qiaomu-download")
     args = parser.parse_args(argv)
     if not 1 <= args.timeout <= 120:
         parser.error("--timeout 必须在 1 到 120 秒之间")
-    result = check(args.config, args.timeout, args.download_only)
+    result = check(args.config, args.timeout, args.download_only, args.download_provider)
     emit(result)
     return 0 if result["ok"] else 2
 
