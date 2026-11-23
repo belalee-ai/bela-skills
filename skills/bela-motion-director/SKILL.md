@@ -63,7 +63,7 @@ description: 为 Bela 的短视频、B-roll、开场、转场、字幕和网页�
 
 详细工具选择读取 `references/tool-selection.md`。
 
-需要接回现有工程时，读取当前项目简报和所用剪辑流程的相关阶段。
+需要接回现有工程时，读取当前项目简报和 bela-video-editing 的相关阶段。
 
 ## demo 完成标准
 
