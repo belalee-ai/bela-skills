@@ -38,7 +38,7 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 | [daily-job-briefing](https://github.com/belalee-ai/daily-job-briefing) | [`bela-daily-job-briefing`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-job-briefing/SKILL.md) |
 | [bela-content-creator](https://github.com/belalee-ai/bela-content-creator) | [`bela-daily-briefing`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-briefing/SKILL.md)、[`bela-content-planner`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-content-planner/SKILL.md)、[`bela-video-topics`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-video-topics/SKILL.md)、[`bela-topic-picker`](skills/bela-topic-picker/SKILL.md)、[`bela-daily-job-briefing`](https://github.com/belalee-ai/bela-skills/blob/bfd7ab0b012a39d2e4b486ea1ed425ba7256dd15/skills/bela-daily-job-briefing/SKILL.md) |
 
-本地旧名 `lidali-ai-content-editing` 对应公开版 `bela-video-editing`，`belalee-broll` 的人物与风格参考及制作流程已合并到 [`bela-broll`](skills/bela-broll/SKILL.md)，`tactful-replies` 对应 `bela-tactful-replies`。
+本地旧名 `lidali-ai-content-editing` 已统一改名为 `bela-video-editing`；本合集里的 `bela-video-editing` 是公开通用版，作者个人风格版另行维护、不随本合集发布。`belalee-broll` 的人物与风格参考及制作流程已合并到 [`bela-broll`](skills/bela-broll/SKILL.md)，`tactful-replies` 对应 `bela-tactful-replies`。
 
 本地旧名 `ameng-tiny-png` 对应 [`bela-tiny-png`](skills/bela-tiny-png/SKILL.md)。
 
