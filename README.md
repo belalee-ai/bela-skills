@@ -348,7 +348,6 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 
 | Skill / 场景 | 使用前确认 |
 | --- | --- |
-| `bela-broll`、`bela-text-motion-library` | 正文引用 `bela-video-editing` 的流程或参考文件，使用相应流程时一并安装。 |
 | `bela-video-editing` | 根据任务使用 ChatCut 等工具；需要章节进度条时，另装 `bela-jindutiao`。其他配套项见其工具清单。 |
 | `bela-spoken-script` | 可单独写稿；继续制作视频时再配合 `bela-video-editing`。 |
 | `bela-channels-remake` | 沿用作者的策划方式；录制后接剪辑时可一并安装 `bela-channels-recut`。 |
