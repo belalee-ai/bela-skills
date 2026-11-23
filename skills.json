@@ -3,14 +3,6 @@
   "repository": "belalee-ai/bela-skills",
   "skills": [
     {
-      "name": "bela-video-editing",
-      "category": "视频制作",
-      "title": "个人剪辑",
-      "summary": "从现有口播、录屏或剪辑工程接续，交付粗剪、字幕、动效或验收。",
-      "path": "skills/bela-video-editing/SKILL.md",
-      "previousRepository": "https://github.com/belalee-ai/video-editing-workflow-bundle"
-    },
-    {
       "name": "bela-channels-recut",
       "category": "视频制作",
       "title": "视频号口播剪辑",

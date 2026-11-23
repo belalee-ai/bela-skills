@@ -40,7 +40,7 @@ npx skills add belalee-ai/bela-skills --skill bela-spoken-script
 一次指定多个 Skill：
 
 ```bash
-npx skills add belalee-ai/bela-skills --skill bela-spoken-script --skill bela-video-editing
+npx skills add belalee-ai/bela-skills --skill bela-spoken-script --skill bela-broll
 ```
 
 选中全部 Skill，再选择安装目标：
@@ -84,18 +84,11 @@ npx skills add belalee-ai/bela-skills --list
 
 | Skill | 用途 |
 | --- | --- |
-| [个人剪辑 · `bela-video-editing`](skills/bela-video-editing/SKILL.md) | 从现有口播、录屏或剪辑工程接续，交付粗剪、字幕、动效或验收。 |
 | [视频号口播剪辑 · `bela-channels-recut`](skills/bela-channels-recut/SKILL.md) | 把录好的竖屏口播剪成带实拍素材、双语字幕和动效的视频。 |
 | [B-roll 配画 · `bela-broll`](skills/bela-broll/SKILL.md) | 按口播节点设计补充画面，含五种风格参考、人物连续性和分阶段验收。 |
 
 <details>
 <summary>视频制作：单项安装命令</summary>
-
-个人剪辑
-
-```bash
-npx skills add belalee-ai/bela-skills --skill bela-video-editing
-```
 
 视频号口播剪辑
 
@@ -348,9 +341,7 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 
 | Skill / 场景 | 使用前确认 |
 | --- | --- |
-| `bela-broll`、`bela-text-motion-library` | 正文引用 `bela-video-editing` 的流程或参考文件，使用相应流程时一并安装。 |
-| `bela-video-editing` | 根据任务使用 ChatCut 等工具；需要章节进度条时，另装 `bela-jindutiao`。其他配套项见其工具清单。 |
-| `bela-spoken-script` | 可单独写稿；继续制作视频时再配合 `bela-video-editing`。 |
+| `bela-spoken-script` | 可单独写稿；继续制作视频时配合你所用的剪辑流程。 |
 | `bela-channels-remake` | 沿用作者的策划方式；录制后接剪辑时可一并安装 `bela-channels-recut`。 |
 | `bela-channels-recut` | 需自备原片和素材。Hypit 优先，或使用随包 Remotion 模板；分别配置依赖。 |
 | `bela-progress-companion` | 先配合 `bela-jindutiao` 判断是否需要角色。随包提供角色素材、分层模板和动作参考。 |
@@ -364,10 +355,10 @@ npx skills add belalee-ai/bela-skills --skill bela-tiny-png
 
 视频号下载与拆解会在本机 `~/.bela-skills-config/bela-wechat-channel-video-download-and-analysis.config` 记住下载器、保存方式、本地根目录和飞书父位置。可以说「这次用红狐」临时切换，或说「以后都用乔木」「忘记下载器」更改偏好。保存位置可单独指定，例如「这次只存本地」「以后都存这个飞书文件夹」或「忘记保存方式」。选择飞书或两处时，首次会请你粘贴目标文件夹或知识库节点链接，之后直接复用。选择本地时无需飞书账号。 在云电脑中也可以复用已有的下载器、Python 环境和网络代理。若云电脑重启后会清空主目录，可把持久卷挂载到 `~/.bela-skills-config/` 以保留偏好。
 
-例如，安装 B-roll 配画及其配套流程：
+例如，安装 B-roll 配画：
 
 ```bash
-npx skills add belalee-ai/bela-skills --skill bela-broll --skill bela-video-editing
+npx skills add belalee-ai/bela-skills --skill bela-broll
 ```
 
 本次整理保留现有 Skill 的功能与资源，上述个人化内容和旧依赖尚未通用化。详细说明以各自 `SKILL.md` 为准。
